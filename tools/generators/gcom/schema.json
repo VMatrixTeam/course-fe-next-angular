@@ -1,0 +1,31 @@
+{
+  "id": "gcom",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Component name",
+      "$default": {
+        "$source": "argv",
+        "index": 0
+      },
+      "x-prompt": "组件名称",
+      "pattern": "^([a-z]+[-]?)+[^-]$"
+    },
+    "project": {
+      "type": "string",
+      "description": "Project to add the component to",
+      "x-prompt": "组件所属项目名"
+    },
+    "path": {
+      "type": "string",
+      "description": "Path to the component file"
+    },
+    "selector": {
+      "type": "string",
+      "description": "Selector of the component",
+      "default": "course-fe-next"
+    }
+  },
+  "required": ["name", "project"]
+}

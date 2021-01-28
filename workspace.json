@@ -1,8 +1,105 @@
 {
-  "version": 2,
-
-  "projects": {},
+  "version": 1,
+  "projects": {
+    "student-app": {
+      "projectType": "application",
+      "root": "apps/student-app",
+      "sourceRoot": "apps/student-app/src",
+      "prefix": "app",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "options": {
+            "outputPath": "dist/apps/student-app",
+            "index": "apps/student-app/src/index.html",
+            "main": "apps/student-app/src/main.ts",
+            "polyfills": "apps/student-app/src/polyfills.ts",
+            "tsConfig": "apps/student-app/tsconfig.app.json",
+            "aot": true,
+            "assets": ["apps/student-app/src/favicon.ico", "apps/student-app/src/assets"],
+            "styles": ["apps/student-app/src/styles.css"],
+            "scripts": []
+          },
+          "configurations": {
+            "production": {
+              "fileReplacements": [
+                {
+                  "replace": "apps/student-app/src/environments/environment.ts",
+                  "with": "apps/student-app/src/environments/environment.prod.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "namedChunks": false,
+              "extractLicenses": false,
+              "vendorChunk": true,
+              "buildOptimizer": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "500kb",
+                  "maximumError": "1mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "2kb",
+                  "maximumError": "4kb"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "browserTarget": "student-app:build"
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "student-app:build:production"
+            }
+          }
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "student-app:build"
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["apps/student-app/src/**/*.ts", "apps/student-app/src/**/*.html"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/apps/student-app"],
+          "options": {
+            "jestConfig": "apps/student-app/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    }
+  },
   "cli": {
-    "defaultCollection": "@nrwl/workspace"
-  }
+    "defaultCollection": "@nrwl/angular"
+  },
+  "schematics": {
+    "@nrwl/angular:application": {
+      "unitTestRunner": "jest",
+      "e2eTestRunner": "cypress",
+      "strict": true,
+      "linter": "eslint"
+    },
+    "@nrwl/angular:library": {
+      "unitTestRunner": "jest",
+      "strict": true,
+      "linter": "eslint"
+    },
+    "@nrwl/angular:component": {}
+  },
+  "defaultProject": "student-app"
 }
