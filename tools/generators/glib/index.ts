@@ -11,7 +11,7 @@ export default async function (tree: Tree, schema: any) {
     strict: true,
     unitTestRunner: 'none',
     linter: 'eslint',
-    selector: 'app'
+    prefix: 'app'
   });
   await formatFiles(tree);
   return () => {
