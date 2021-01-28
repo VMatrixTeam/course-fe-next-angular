@@ -4,11 +4,11 @@ The future of course-fe
 
 ### 创建 library
 
-`npm run workspace-generator -- glib`
+`npm run wg -- glib`
 
 或
 
-`npm run workspace-generator -- glib <name> --directory=<directory> --tags=<tags> --type=<type>`
+`npm run wg -- glib <name> --directory=<directory> --tags=<tags> --type=<type>`
 
 参数解释：
 
@@ -19,10 +19,10 @@ The future of course-fe
 
 ### 创建 component
 
-`npm run workspace-generator -- gcom`
+`npm run wg -- gcom`
 
 或
 
-`npm run workspace-generator -- gcom <name> --project=<project>`
+`npm run wg -- gcom <name> --project=<project>`
 
 其中 `project` 的值可以参考 `nx.json`
