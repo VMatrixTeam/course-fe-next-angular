@@ -10,6 +10,20 @@ The future of course-fe
 
 ## 命令
 
+### 本地开发测试
+
+`npm install`
+`npm start`
+
+### 生产构建
+
+`npm run prod:install`
+`npm run prod:affected:build`
+
+### 构建文档 (Compodoc)
+
+`npm run compodoc`
+
 ### 创建 Nx Library
 
 `npm run wg -- glib` 或 `npm run wg -- glib <name> --type=<type> [--directory=<directory>] [--scope=<scope>] [--tags=<tags>]`
