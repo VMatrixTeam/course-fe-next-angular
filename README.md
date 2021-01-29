@@ -2,13 +2,19 @@
 
 The future of course-fe
 
+## 推荐 IDE 插件
+
+- tailwind css 的 auto complete 插件
+- eslint 插件
+- prettier 插件
+
+---
+
+## 命令
+
 ### 创建 library
 
-`npm run wg -- glib`
-
-或
-
-`npm run wg -- glib <name> --directory=<directory> --tags=<tags> --type=<type>`
+`npm run wg -- glib` 或 `npm run wg -- glib <name> --directory=<directory> --tags=<tags> --type=<type>`
 
 参数解释：
 
@@ -19,10 +25,6 @@ The future of course-fe
 
 ### 创建 component
 
-`npm run wg -- gcom`
-
-或
-
-`npm run wg -- gcom <name> --project=<project>`
+`npm run wg -- gcom` 或 `npm run wg -- gcom <name> --project=<project>`
 
 其中 `project` 的值可以参考 `nx.json`
