@@ -10,7 +10,7 @@ The future of course-fe
 
 ## 命令
 
-### 创建 library
+### 创建 Nx Library
 
 `npm run wg -- glib` 或 `npm run wg -- glib <name> --type=<type> [--directory=<directory>] [--scope=<scope>] [--tags=<tags>]`
 
@@ -23,9 +23,17 @@ The future of course-fe
 
 提示：使用 `--dry-run` 来查看命令效果，而不令命令生效
 
-### 创建 component
+### 创建 Angular Component
 
 `npm run wg -- gcom` 或 `npm run wg -- gcom <name> --project=<project>`
+
+其中 `project` 的值可以参考 `nx.json`
+
+提示：使用 `--dry-run` 来查看命令效果，而不令命令生效
+
+### 创建 Angular Service
+
+`npm run wg -- glib` 或 `npm run wg -- glib <name> --project=<project>`
 
 其中 `project` 的值可以参考 `nx.json`
 
