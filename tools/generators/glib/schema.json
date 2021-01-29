@@ -3,31 +3,12 @@
   "id": "glib",
   "type": "object",
   "properties": {
-    "name": {
-      "type": "string",
-      "description": "Library name",
-      "$default": {
-        "$source": "argv",
-        "index": 0
-      },
-      "x-prompt": "此库的名称",
-      "pattern": "^[a-zA-Z]{1}.*$"
-    },
-    "directory": {
-      "type": "string",
-      "description": "Directory to the library",
-      "x-prompt": "此库的所属文件夹"
-    },
-    "scope": {
-      "type": "string",
-      "description": "Scope of the library"
-    },
     "type": {
       "type": "string",
       "description": "Type of the library",
       "enum": ["data-access", "feature", "ui", "util"],
       "x-prompt": {
-        "message": "此库的类型",
+        "message": "类型",
         "type": "list",
         "items": [
           {
@@ -49,11 +30,31 @@
         ]
       }
     },
+    "name": {
+      "type": "string",
+      "description": "Library name",
+      "$default": {
+        "$source": "argv",
+        "index": 0
+      },
+      "x-prompt": "名称",
+      "pattern": "^([a-z]+[-]?)+[^-]$"
+    },
+    "directory": {
+      "type": "string",
+      "description": "Directory to the library",
+      "x-prompt": "所属文件夹，可留空"
+    },
+    "scope": {
+      "type": "string",
+      "description": "Scope of the library",
+      "x-prompt": "领域，可留空，默认为project名"
+    },
     "tags": {
       "type": "string",
       "description": "Tags of the library",
-      "x-prompt": "此库的 tag，用英文逗号分隔"
+      "x-prompt": "tag，用英文逗号分隔，可留空"
     }
   },
-  "required": ["name", "directory", "scope", "type"]
+  "required": ["name", "type"]
 }

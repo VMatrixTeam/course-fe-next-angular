@@ -9,13 +9,13 @@
         "$source": "argv",
         "index": 0
       },
-      "x-prompt": "组件名称",
+      "x-prompt": "名称",
       "pattern": "^([a-z]+[-]?)+[^-]$"
     },
     "project": {
       "type": "string",
       "description": "Project to add the component to",
-      "x-prompt": "组件所属项目名"
+      "x-prompt": "所属项目名"
     },
     "path": {
       "type": "string",
@@ -24,7 +24,7 @@
     "selector": {
       "type": "string",
       "description": "Selector of the component",
-      "default": "course-fe-next"
+      "default": "app"
     }
   },
   "required": ["name", "project"]
