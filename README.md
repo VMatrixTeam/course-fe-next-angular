@@ -8,13 +8,11 @@ The future of course-fe
 - eslint 插件
 - prettier 插件
 
----
-
 ## 命令
 
 ### 创建 library
 
-`npm run wg -- glib` 或 `npm run wg -- glib <name> --directory=<directory> --tags=<tags> --type=<type>`
+`npm run wg -- glib` 或 `npm run wg -- glib <name> --directory=<directory> --type=<type> [--tags=<tags>]`
 
 参数解释：
 

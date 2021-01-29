@@ -18,21 +18,21 @@
       "description": "Directory to the library",
       "x-prompt": "此库的所属文件夹"
     },
-    "tags": {
+    "scope": {
       "type": "string",
-      "description": "Tags of the library",
-      "x-prompt": "此库的 tag，用英文逗号分隔"
+      "description": "Scope of the library"
     },
     "type": {
       "type": "string",
       "description": "Type of the library",
+      "enum": ["data-access", "feature", "ui", "util"],
       "x-prompt": {
         "message": "此库的类型",
         "type": "list",
         "items": [
           {
             "value": "data-access",
-            "label": "数据交换 (data-access)"
+            "label": "数据访问 (data-access)"
           },
           {
             "value": "feature",
@@ -48,7 +48,12 @@
           }
         ]
       }
+    },
+    "tags": {
+      "type": "string",
+      "description": "Tags of the library",
+      "x-prompt": "此库的 tag，用英文逗号分隔"
     }
   },
-  "required": ["name", "directory", "type"]
+  "required": ["name", "directory", "scope", "type"]
 }

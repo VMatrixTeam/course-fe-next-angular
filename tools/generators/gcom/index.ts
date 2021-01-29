@@ -26,12 +26,12 @@ export default function (schema: any) {
         skipTests: true,
         style: 'css'
       }),
-      applyComponentTemplate(schema)
+      applyNewTemplate(schema)
     ])(tree, context);
   };
 }
 
-function applyComponentTemplate(schema: any) {
+function applyNewTemplate(schema: any) {
   return mergeWith(
     apply(url('./files'), [
       applyTemplates({

@@ -14,7 +14,10 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
-    "paths": {}
+    "paths": {
+      "@course-fe-next/shared/data-api-access": ["libs/shared/data-api-access/src/index.ts"],
+      "@course-fe-next/tools-stub": ["libs/tools-stub/src/index.ts"]
+    }
   },
   "exclude": ["node_modules", "tmp"]
 }
