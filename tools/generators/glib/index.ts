@@ -62,6 +62,12 @@ export default async function (tree: Tree, schema: any) {
     return json;
   });
 
+  await updateJson(tree, join(projectRoot, 'tsconfig.lib.json'), (json) => {
+    // enforce es2018 as the compile target ;)
+    json.compilerOptions.target = 'es2018';
+    return json;
+  });
+
   await formatFiles(tree);
 
   return () => {
