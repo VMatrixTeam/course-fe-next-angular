@@ -1,23 +1,86 @@
 {
   "root": true,
   "ignorePatterns": ["**/*"],
-  "plugins": ["@nrwl/nx", "prettier", "jsdoc"],
+  "plugins": ["@nrwl/nx", "prettier", "jsdoc", "prefer-arrow"],
+  "settings": {
+    "jsdoc": {
+      "ignorePrivate": true,
+      "ignoreInternal": true,
+      "mode": "typescript"
+    }
+  },
   "overrides": [
     {
-      "files": ["*.js", "*.jsx"],
+      "files": ["*.html"],
+      "extends": ["plugin:@nrwl/nx/angular-template"],
+      "rules": {
+        "@angular-eslint/template/conditional-complexity": "error",
+        "@angular-eslint/template/cyclomatic-complexity": "error",
+        "@angular-eslint/template/no-call-expression": "error",
+        "@angular-eslint/template/use-track-by-function": "error"
+      }
+    },
+    {
+      "files": ["*.js"],
       "extends": ["plugin:@nrwl/nx/javascript"],
       "rules": {}
     },
     {
-      "files": ["*.ts", "*.tsx"],
+      "files": ["*.ts"],
       "extends": [
-        "plugin:prettier/recommended",
         "plugin:@nrwl/nx/typescript",
+        "plugin:@nrwl/nx/angular",
+        "plugin:@angular-eslint/template/process-inline-templates",
+        "plugin:prettier/recommended",
         "plugin:jsdoc/recommended",
+        "plugin:import/errors",
+        "plugin:import/warnings",
+        "plugin:import/typescript",
         "airbnb-base-typescript-prettier"
       ],
       "parser": "@typescript-eslint/parser",
       "rules": {
+        "prefer-arrow-callback": "error",
+        "class-methods-use-this": "warn",
+        "no-console": ["error", { "allow": ["info", "error", "warn"] }],
+        "no-useless-constructor": "off",
+        "lines-between-class-members": "off",
+        "padding-line-between-statements": [
+          "error",
+          {
+            "blankLine": "always",
+            "prev": ["const", "let"],
+            "next": "function"
+          },
+          {
+            "blankLine": "always",
+            "prev": "import",
+            "next": "*"
+          },
+          {
+            "blankLine": "never",
+            "prev": "import",
+            "next": "import"
+          }
+        ],
+        "import/prefer-default-export": "off",
+        "import/no-unresolved": "off",
+        "import/order": [
+          "error",
+          {
+            "newlines-between": "never",
+            "alphabetize": { "order": "asc", "caseInsensitive": true }
+          }
+        ],
+        "prefer-arrow/prefer-arrow-functions": [
+          "error",
+          {
+            "disallowPrototype": true,
+            "singleReturnOnly": false,
+            "classPropertiesAllowed": false,
+            "allowStandaloneDeclarations": true
+          }
+        ],
         "@nrwl/nx/enforce-module-boundaries": [
           "error",
           {
@@ -55,36 +118,20 @@
           "error",
           { "type": "element", "prefix": "app", "style": "kebab-case" }
         ],
-        "no-console": ["error", { "allow": ["info", "error", "warn"] }],
-        "lines-between-class-members": "off",
-        "no-useless-constructor": "off",
-        "padding-line-between-statements": [
+        "@angular-eslint/directive-selector": [
           "error",
           {
-            "blankLine": "always",
-            "prev": ["const", "let"],
-            "next": "function"
-          },
-          {
-            "blankLine": "always",
-            "prev": "import",
-            "next": "*"
-          },
-          {
-            "blankLine": "never",
-            "prev": "import",
-            "next": "import"
+            "type": "attribute",
+            "prefix": "app",
+            "style": "camelCase"
           }
         ],
-        "import/prefer-default-export": "off",
-        "import/no-unresolved": "off",
-        "import/order": [
-          "error",
-          {
-            "newlines-between": "never",
-            "alphabetize": { "order": "asc", "caseInsensitive": true }
-          }
-        ],
+        "@angular-eslint/contextual-decorator": "error",
+        "@angular-eslint/prefer-on-push-component-change-detection": "error",
+        "@angular-eslint/use-injectable-provided-in": "error",
+        "@angular-eslint/use-lifecycle-interface": "error",
+        "@angular-eslint/prefer-output-readonly": "error",
+        "@angular-eslint/relative-url-prefix": "error",
         "@typescript-eslint/lines-between-class-members": "error",
         "@typescript-eslint/no-explicit-any": "off",
         "@typescript-eslint/explicit-module-boundary-types": "off",
@@ -139,7 +186,24 @@
         "@typescript-eslint/no-unsafe-member-access": "error",
         "@typescript-eslint/no-unsafe-return": "error",
         "@typescript-eslint/prefer-includes": "error",
-        "@typescript-eslint/prefer-nullish-coalescing": "error"
+        "@typescript-eslint/prefer-nullish-coalescing": "error",
+        "@typescript-eslint/member-ordering": [
+          "error",
+          {
+            "classes": [
+              "public-field",
+              "protected-field",
+              "private-field",
+              "constructor",
+              "public-method",
+              "protected-method",
+              "private-method"
+            ],
+            "classExpressions": ["field", "constructor", "method"],
+            "interfaces": ["signature", "field", "constructor", "method"],
+            "typeLiterals": ["signature", "field", "constructor", "method"]
+          }
+        ]
       }
     }
   ]

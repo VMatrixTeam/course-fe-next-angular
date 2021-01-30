@@ -1,16 +1,17 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { DataApiAccessModule } from '@course-fe-next/shared/data-api-access';
 import { JsonConvert } from 'json2typescript';
 import { Observable } from 'rxjs';
 import { map, timeout } from 'rxjs/operators';
 
 /**
- * @template T
- *
  * 表示构造函数，其中`T`表示构造函数的返回值
  *
  * 除了可以是我们自己用`class`声明出来的构造函数之外，
  * 还可以是ES原生类型：`String`、`Number`、`Boolean`等，注意开头大写
+ *
+ * @template T
  */
 export type TypeConstructor<T> = new (...args: any[]) => T;
 
@@ -99,14 +100,15 @@ export const API_ENDPOINT_PREFIX = '/api';
  * // 获得login对应的绝对路径，以供XHR使用
  * toAbsoluteApiPath('login')
  *
- * @param path - API相对路径
- * @returns 绝对路径
+ * @param {string} path - API相对路径
+ * @returns {string} 绝对路径
  */
 export function toAbsoluteApiPath(path: string) {
   return `${API_ENDPOINT_PREFIX}/${path}`;
 }
 
 /**
+ * @internal
  * @ignore
  */
 function withDefaultValues<T>(parameters: BaseParameters<T>) {
@@ -117,11 +119,12 @@ function withDefaultValues<T>(parameters: BaseParameters<T>) {
   };
 }
 
-@Injectable()
+@Injectable({ providedIn: DataApiAccessModule })
 export class DataApiAccessService {
   private readonly jsonConvert = new JsonConvert();
 
   /**
+   * @internal
    * @ignore
    */
   constructor(private readonly httpClient: HttpClient) {}
@@ -129,8 +132,9 @@ export class DataApiAccessService {
   /**
    * 执行 HTTP GET 请求
    *
-   * @param parameters - 请求参数
-   * @returns 其中`T`为服务端响应内容的类型，若输入的请求参数中没有指定`responseType`，则`T`为`unknown`，即忽略响应内容
+   * @template T
+   * @param {GetParameters<T>} parameters - 请求参数
+   * @returns {Observable<T>} 其中`T`为服务端响应内容的类型，若输入的请求参数中没有指定`responseType`，则`T`为`unknown`，即忽略响应内容
    */
   get<T>(parameters: GetParameters<T>): Observable<T> {
     const { path, params, timeoutMs } = withDefaultValues(parameters);
