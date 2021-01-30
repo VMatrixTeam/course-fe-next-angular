@@ -1,7 +1,7 @@
 {
   "root": true,
   "ignorePatterns": ["**/*"],
-  "plugins": ["@nrwl/nx", "prettier"],
+  "plugins": ["@nrwl/nx", "prettier", "jsdoc"],
   "overrides": [
     {
       "files": ["*.js", "*.jsx"],
@@ -13,6 +13,7 @@
       "extends": [
         "plugin:prettier/recommended",
         "plugin:@nrwl/nx/typescript",
+        "plugin:jsdoc/recommended",
         "airbnb-base-typescript-prettier"
       ],
       "parser": "@typescript-eslint/parser",

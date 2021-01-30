@@ -18,29 +18,19 @@
     "default": {
       "runner": "@nrwl/workspace/tasks-runners/default",
       "options": {
-        "cacheableOperations": [
-          "build",
-          "lint",
-          "test",
-          "compodoc"
-        ]
+        "cacheableOperations": ["build", "lint", "test", "compodoc"]
       }
     }
   },
   "projects": {
     "student-app": {
-      "tags": [
-        "scope:student-app"
-      ]
+      "tags": ["scope:student-app"]
     },
     "shared-data-api-access": {
-      "tags": [
-        "scope:shared",
-        "type:data-access"
-      ]
+      "tags": ["scope:shared", "type:data-access"]
     },
     "tools-stub": {
-      "tags": []
+      "tags": ["type:forbidden"]
     }
   }
 }

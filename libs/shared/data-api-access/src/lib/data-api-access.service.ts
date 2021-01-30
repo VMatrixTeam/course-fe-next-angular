@@ -1,8 +1,8 @@
-import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { JsonConvert } from 'json2typescript';
 import { Observable } from 'rxjs';
 import { map, timeout } from 'rxjs/operators';
-import { JsonConvert } from 'json2typescript';
 
 /**
  * @template T
@@ -27,6 +27,7 @@ export interface BaseParameters<T> {
 
   /**
    * 附着于URL的请求参数，具体见{@link HttpParams}
+   *
    * @see {@link HttpParams}
    */
   params?: HttpParams;
@@ -99,11 +100,15 @@ export const API_ENDPOINT_PREFIX = '/api';
  * toAbsoluteApiPath('login')
  *
  * @param path - API相对路径
+ * @returns 绝对路径
  */
 export function toAbsoluteApiPath(path: string) {
   return `${API_ENDPOINT_PREFIX}/${path}`;
 }
 
+/**
+ * @ignore
+ */
 function withDefaultValues<T>(parameters: BaseParameters<T>) {
   return {
     params: new HttpParams(),
@@ -125,7 +130,7 @@ export class DataApiAccessService {
    * 执行 HTTP GET 请求
    *
    * @param parameters - 请求参数
-   * @return 其中`T`为服务端响应内容的类型，若输入的请求参数中没有指定`responseType`，则`T`为`unknown`，即忽略响应内容
+   * @returns 其中`T`为服务端响应内容的类型，若输入的请求参数中没有指定`responseType`，则`T`为`unknown`，即忽略响应内容
    */
   get<T>(parameters: GetParameters<T>): Observable<T> {
     const { path, params, timeoutMs } = withDefaultValues(parameters);

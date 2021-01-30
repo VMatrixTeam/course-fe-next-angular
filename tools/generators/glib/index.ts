@@ -1,6 +1,14 @@
-import { Tree, formatFiles, installPackagesTask } from '@nrwl/devkit';
+import {
+  Tree,
+  names,
+  formatFiles,
+  installPackagesTask,
+  updateJson,
+  getWorkspaceLayout
+} from '@nrwl/devkit';
 import { libraryGenerator } from '@nrwl/angular/src/schematics/library/library';
 import { dasherize } from '@nrwl/workspace/src/utils/strings';
+import { join } from 'path';
 
 const TYPE_PREFIX_MAP = {
   'data-access': 'data-',
@@ -36,7 +44,18 @@ export default async function (tree: Tree, schema: any) {
     linter: 'eslint',
     prefix: 'app'
   });
+
+  // fix a typescript-eslint bug
+  const name = names(schema.name).fileName;
+  const projectDirectory = schema.directory ? `${names(schema.directory).fileName}/${name}` : name;
+  const projectRoot = `${getWorkspaceLayout(tree).libsDir}/${projectDirectory}`;
+  await updateJson(tree, join(projectRoot, '.eslintrc.json'), (json) => {
+    json.overrides[0].parserOptions.project[0] = 'tsconfig.*?.json';
+    return json;
+  });
+
   await formatFiles(tree);
+
   return () => {
     installPackagesTask(tree);
   };

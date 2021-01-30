@@ -109,12 +109,6 @@
       "sourceRoot": "libs/tools-stub/src",
       "projectType": "library",
       "architect": {
-        "lint": {
-          "builder": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["libs/tools-stub/**/*.ts"]
-          }
-        },
         "compodoc": {
           "builder": "@twittwer/compodoc:compodoc",
           "options": {

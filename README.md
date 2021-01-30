@@ -39,6 +39,23 @@ The future of course-fe
 
 提示：使用 `--dry-run` 来查看命令效果，而不令命令生效
 
+### 删除 Nx Library
+
+`npm run nx -- g rm <project>`
+
+提示：请慎重操作，删除前请使用 `--dry-run` 来查看命令效果，而不令命令生效
+
+### 移动 Nx Library
+
+`npm run nx -- g mv --project <project> <destionation>`
+
+例子:
+
+将 `libs/my-feature-lib` 移动到 `libs/shared/my-feature-lib`：
+`npm run nx -- g mv --project my-feature-lib shared/my-feature-lib`
+
+提示：使用 `--dry-run` 来查看命令效果，而不令命令生效
+
 ### 创建 Angular Component
 
 `npm run wg -- gcom` 或 `npm run wg -- gcom <name> --project=<project>`
