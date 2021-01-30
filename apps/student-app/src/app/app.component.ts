@@ -7,7 +7,7 @@ import { PrimeNGConfig } from 'primeng/api';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  constructor(private primengConfig: PrimeNGConfig) {
+  constructor(private readonly primengConfig: PrimeNGConfig) {
     this.primengConfig.ripple = true;
   }
 }
