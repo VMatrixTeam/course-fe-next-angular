@@ -51,8 +51,6 @@ export interface BaseParameters<T> {
 
   /**
    * 表示此请求期望在多少秒没有收到响应时算作失败，默认值见{@link DEFAULT_CONNECTION_TIMEOUT_MS}
-   *
-   * @see {@link DEFAULT_CONNECTION_TIMEOUT}
    */
   timeoutMs?: number;
 }
@@ -72,8 +70,7 @@ export interface DeleteParameters<T> extends BaseParameters<T> {}
  */
 export interface PostParameters<T> extends BaseParameters<T> {
   /**
-   * 请求体的内容，必须为对象类型，
-   * 但可以为空，表示对应的请求的请求体为空
+   * 请求体的内容，必须为对象类型，但可以为空，表示对应的请求的请求体为空
    */
   payload?: Record<string, unknown>;
 }
@@ -84,7 +81,7 @@ export interface PostParameters<T> extends BaseParameters<T> {
 export interface PutParameters<T> extends PostParameters<T> {}
 
 /**
- * 默认的请求timeout时间，单位为毫秒
+ * 默认的请求超时时间，单位为毫秒
  */
 export const DEFAULT_CONNECTION_TIMEOUT_MS = 8000;
 
@@ -100,23 +97,11 @@ export const API_ENDPOINT_PREFIX = '/api';
  * // 获得login对应的绝对路径，以供XHR使用
  * toAbsoluteApiPath('login')
  *
- * @param {string} path - API相对路径
+ * @param {string} path API相对路径
  * @returns {string} 绝对路径
  */
 export function toAbsoluteApiPath(path: string) {
   return `${API_ENDPOINT_PREFIX}/${path}`;
-}
-
-/**
- * @internal
- * @ignore
- */
-function withDefaultValues<T>(parameters: BaseParameters<T>) {
-  return {
-    params: new HttpParams(),
-    timeoutMs: DEFAULT_CONNECTION_TIMEOUT_MS,
-    ...parameters
-  };
 }
 
 @Injectable({ providedIn: DataApiAccessModule })
@@ -133,11 +118,11 @@ export class DataApiAccessService {
    * 执行 HTTP GET 请求
    *
    * @template T
-   * @param {GetParameters<T>} parameters - 请求参数
+   * @param {GetParameters<T>} parameters 请求参数
    * @returns {Observable<T>} 其中`T`为服务端响应内容的类型，若输入的请求参数中没有指定`responseType`，则`T`为`unknown`，即忽略响应内容
    */
   get<T>(parameters: GetParameters<T>): Observable<T> {
-    const { path, params, timeoutMs } = withDefaultValues(parameters);
+    const { path, params, timeoutMs } = this.withDefaultValues(parameters);
     return this.handleApiAccess(
       this.httpClient.get<T>(toAbsoluteApiPath(path), { params }),
       timeoutMs
@@ -155,5 +140,13 @@ export class DataApiAccessService {
         !responseType ? response : this.jsonConvert.deserializeObject(response, responseType)
       )
     );
+  }
+
+  private withDefaultValues<T>(parameters: BaseParameters<T>) {
+    return {
+      params: new HttpParams(),
+      timeoutMs: DEFAULT_CONNECTION_TIMEOUT_MS,
+      ...parameters
+    };
   }
 }

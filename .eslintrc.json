@@ -41,7 +41,7 @@
       "parser": "@typescript-eslint/parser",
       "rules": {
         "prefer-arrow-callback": "error",
-        "class-methods-use-this": "warn",
+        "class-methods-use-this": "off",
         "no-console": ["error", { "allow": ["info", "error", "warn"] }],
         "no-useless-constructor": "off",
         "lines-between-class-members": "off",
