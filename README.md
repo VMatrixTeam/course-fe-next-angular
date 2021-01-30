@@ -66,7 +66,7 @@ The future of course-fe
 
 ### 创建 Angular Service
 
-`npm run wg -- glib` 或 `npm run wg -- glib <name> --project=<project>`
+`npm run wg -- gsvc` 或 `npm run wg -- gsvc <name> --project=<project>`
 
 其中 `project` 的值可以参考 `nx.json`
 
