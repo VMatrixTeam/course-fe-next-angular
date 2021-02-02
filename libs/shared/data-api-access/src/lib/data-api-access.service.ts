@@ -1,6 +1,7 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { DataApiAccessModule } from '@course-fe-next/shared/data-api-access';
+import { retryBackoff, RetryBackoffConfig } from 'backoff-rxjs';
 import { JsonConvert } from 'json2typescript';
 import { Observable } from 'rxjs';
 import { map, timeout } from 'rxjs/operators';
@@ -58,7 +59,14 @@ export interface BaseParameters<T> {
 /**
  * 包装GET请求的请求参数的对象接口
  */
-export interface GetParameters<T> extends BaseParameters<T> {}
+export interface GetParameters<T> extends BaseParameters<T> {
+  /**
+   * 指数退避重试配置，见{@link RetryBackoffConfig}
+   *
+   * 默认值见{@link DEFAULT_RETRY_BACKOFF_CONFIG}
+   */
+  retryConfig?: RetryBackoffConfig;
+}
 
 /**
  * 包装DELETE请求的请求参数的对象接口
@@ -84,6 +92,15 @@ export interface PutParameters<T> extends PostParameters<T> {}
  * 默认的请求超时时间，单位为毫秒
  */
 export const DEFAULT_CONNECTION_TIMEOUT_MS = 8000;
+
+/**
+ * 默认的指数退避重试参数
+ */
+export const DEFAULT_RETRY_BACKOFF_CONFIG: RetryBackoffConfig = {
+  initialInterval: 0,
+  maxRetries: 3,
+  resetOnSuccess: true
+};
 
 /**
  * 默认的服务端API端点前缀
@@ -122,11 +139,16 @@ export class DataApiAccessService {
    * @returns {Observable<T>} 其中`T`为服务端响应内容的类型，若输入的请求参数中没有指定`responseType`，则`T`为`unknown`，即忽略响应内容
    */
   get<T>(parameters: GetParameters<T>): Observable<T> {
-    const { path, params, timeoutMs } = this.withDefaultValues(parameters);
+    const aggregated = {
+      params: new HttpParams(),
+      timeoutMs: DEFAULT_CONNECTION_TIMEOUT_MS,
+      retryConfig: DEFAULT_RETRY_BACKOFF_CONFIG,
+      ...parameters
+    };
     return this.handleApiAccess(
-      this.httpClient.get<T>(toAbsoluteApiPath(path), { params }),
-      timeoutMs
-    );
+      this.httpClient.get<T>(toAbsoluteApiPath(aggregated.path), { params: aggregated.params }),
+      aggregated.timeoutMs
+    ).pipe(retryBackoff(aggregated.retryConfig));
   }
 
   private handleApiAccess<T>(
@@ -140,13 +162,5 @@ export class DataApiAccessService {
         !responseType ? response : this.jsonConvert.deserializeObject(response, responseType)
       )
     );
-  }
-
-  private withDefaultValues<T>(parameters: BaseParameters<T>) {
-    return {
-      params: new HttpParams(),
-      timeoutMs: DEFAULT_CONNECTION_TIMEOUT_MS,
-      ...parameters
-    };
   }
 }
