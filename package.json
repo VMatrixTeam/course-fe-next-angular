@@ -4,7 +4,7 @@
   "license": "MIT",
   "scripts": {
     "nx": "nx",
-    "prod:install": "NODE_ENV=production npm install",
+    "prod:install": "NODE_ENV=production npm ci",
     "prod:build": "nx build --prod",
     "prod:affected:build": "nx affected:build --prod",
     "compodoc": "nx run tools-stub:compodoc",
