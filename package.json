@@ -42,7 +42,6 @@
     "@angular/platform-browser-dynamic": "^11.0.0",
     "@angular/router": "^11.0.0",
     "@ngneat/tailwind": "^6.0.0",
-    "@ngrx/data": "^10.1.2",
     "@rx-angular/state": "^1.4.3",
     "@rx-angular/template": "^1.0.0-beta.4",
     "backoff-rxjs": "^6.5.7",

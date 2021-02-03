@@ -27,10 +27,13 @@
       "tags": ["scope:student-app"]
     },
     "shared-data-api-access": {
-      "tags": ["scope:shared", "type:data-access"]
+      "tags": ["load:eager", "scope:shared", "type:data-access"]
     },
     "tools-stub": {
       "tags": ["type:forbidden"]
+    },
+    "shared-data-course-api": {
+      "tags": ["load:eager", "scope:shared", "type:data-access"]
     }
   }
 }

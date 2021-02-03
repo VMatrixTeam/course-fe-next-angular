@@ -126,6 +126,23 @@
           }
         }
       }
+    },
+    "shared-data-course-api": {
+      "projectType": "library",
+      "root": "libs/shared/data-course-api",
+      "sourceRoot": "libs/shared/data-course-api/src",
+      "prefix": "app",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/shared/data-course-api/src/**/*.ts",
+              "libs/shared/data-course-api/src/**/*.html"
+            ]
+          }
+        }
+      }
     }
   },
   "cli": {

@@ -40,6 +40,7 @@
       ],
       "parser": "@typescript-eslint/parser",
       "rules": {
+        "max-classes-per-file": "off",
         "prefer-arrow-callback": "error",
         "class-methods-use-this": "off",
         "no-console": ["error", { "allow": ["info", "error", "warn"] }],
@@ -97,11 +98,11 @@
               },
               {
                 "sourceTag": "type:ui",
-                "onlyDependOnLibsWithTags": ["type:util"]
+                "onlyDependOnLibsWithTags": ["type:ui", "type:util"]
               },
               {
                 "sourceTag": "type:data-access",
-                "onlyDependOnLibsWithTags": ["type:util"]
+                "onlyDependOnLibsWithTags": ["type:data-access", "type:util"]
               },
               {
                 "sourceTag": "type:feature",
@@ -122,10 +123,7 @@
             ]
           }
         ],
-        "@angular-eslint/component-selector": [
-          "error",
-          { "type": "element", "prefix": "app", "style": "kebab-case" }
-        ],
+        "@angular-eslint/component-selector": ["error", { "type": "element", "prefix": "app", "style": "kebab-case" }],
         "@angular-eslint/directive-selector": [
           "error",
           {
@@ -154,7 +152,8 @@
           },
           {
             "selector": ["variableLike", "memberLike", "property", "method", "function"],
-            "format": ["strictCamelCase"]
+            "format": ["strictCamelCase"],
+            "leadingUnderscore": "allow"
           },
           {
             "selector": "variable",
@@ -199,9 +198,9 @@
           "error",
           {
             "classes": [
-              "public-field",
-              "protected-field",
               "private-field",
+              "protected-field",
+              "public-field",
               "constructor",
               "public-method",
               "protected-method",
