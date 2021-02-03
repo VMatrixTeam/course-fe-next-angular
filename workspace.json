@@ -96,10 +96,7 @@
         "lint": {
           "builder": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": [
-              "libs/shared/data-api-access/src/**/*.ts",
-              "libs/shared/data-api-access/src/**/*.html"
-            ]
+            "lintFilePatterns": ["libs/shared/data-api-access/src/**/*.ts", "libs/shared/data-api-access/src/**/*.html"]
           }
         }
       }
@@ -136,10 +133,21 @@
         "lint": {
           "builder": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": [
-              "libs/shared/data-course-api/src/**/*.ts",
-              "libs/shared/data-course-api/src/**/*.html"
-            ]
+            "lintFilePatterns": ["libs/shared/data-course-api/src/**/*.ts", "libs/shared/data-course-api/src/**/*.html"]
+          }
+        }
+      }
+    },
+    "shared-util-rx": {
+      "projectType": "library",
+      "root": "libs/shared/util-rx",
+      "sourceRoot": "libs/shared/util-rx/src",
+      "prefix": "app",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/shared/util-rx/src/**/*.ts", "libs/shared/util-rx/src/**/*.html"]
           }
         }
       }

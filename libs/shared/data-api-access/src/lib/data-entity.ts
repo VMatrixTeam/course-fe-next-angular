@@ -4,17 +4,44 @@ import { ReplaySubject } from 'rxjs';
 import { AsyncActionState } from './async-action-state';
 import { DataApiAccessService, ObjectType, ObjectTypeConstructor } from './data-api-access.service';
 
+/**
+ * 表示在给定的HTTP方法下，实体对应的REST Api Endpoint地址，不需要带任何像`/api`这样的前缀
+ *
+ * @example
+ * const myEndpoints = DataEntityEndpoints.forAll('user')
+ */
 export class DataEntityEndpoints {
   constructor(readonly getPath: string, readonly postPath: string) {}
 
+  /**
+   * 向GET、POST、DELETE、PUT方法应用同一个路径，以构造这样的`DataEntityEndpoints`对象
+   *
+   * @param {string} path 路径
+   * @returns {DataEntityEndpoints} GET、POST、DELETE、PUT方法都对应同一个路径的实例
+   */
   static forAll(path: string) {
     return new DataEntityEndpoints(path, path);
   }
 }
 
-export class DataEntityConfiguration<U> {
-  readonly typeConstructor!: U;
+/**
+ * 实体类的配置
+ *
+ * @template T
+ */
+export class DataEntityConfiguration<T extends ObjectTypeConstructor<any>> {
+  /**
+   * 表示此实体对应的数据类型的构造器，参见{@link ObjectTypeConstructor}
+   *
+   * @see ObjectTypeConstructor
+   */
+  readonly typeConstructor!: T;
 
+  /**
+   * 表示此实体对应的REST Api Endpoint，参见{@link DataEntityEndpoints}
+   *
+   * @see DataEntityEndpoints
+   */
   readonly endpoints!: DataEntityEndpoints;
 }
 
