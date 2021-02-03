@@ -88,6 +88,14 @@
             "allow": [],
             "depConstraints": [
               {
+                "sourceTag": "load:eager",
+                "onlyDependOnLibsWithTags": ["load:eager"]
+              },
+              {
+                "sourceTag": "load:lazy",
+                "onlyDependOnLibsWithTags": ["load:eager"]
+              },
+              {
                 "sourceTag": "type:ui",
                 "onlyDependOnLibsWithTags": ["type:util"]
               },

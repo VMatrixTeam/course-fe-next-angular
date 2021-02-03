@@ -36,7 +36,9 @@ export default async function (tree: Tree, schema: any) {
   await libraryGenerator(tree, {
     name: schema.name,
     directory: schema.directory,
-    tags: `scope:${scope},type:${schema.type}${schema.tags ? `,${schema.tags}` : ''}`,
+    tags: `load:${schema.load},scope:${scope},type:${schema.type}${
+      schema.tags ? `,${schema.tags}` : ''
+    }`,
     simpleModuleName: true,
     style: 'css',
     strict: true,

@@ -28,14 +28,15 @@ The future of course-fe
 
 ### 创建 Nx Library
 
-`npm run wg -- glib` 或 `npm run wg -- glib <name> --type=<type> [--directory=<directory>] [--scope=<scope>] [--tags=<tags>]`
+`npm run wg -- glib` 或 `npm run wg -- glib <name> --type=<type> --load=<load> [--directory=<directory>] [--scope=<scope>] [--tags=<tags>]`
 
 参数解释：
 
 1. `type` 只能为 `data-access`, `feature`, `ui` 或 `util` 其中一项
-2. `directory` 为此 library 位于的目录名，即 `libs/<directory>/<library>`，用于方便分类，可留空
-3. `scope` 为此 library 的领域，要么为此 library 的 project 名，要么为 `shared`，默认为 project 名
-4. `tags` 每一项格式为`name:value`，每一项之间使用 `,` 分隔，可留空
+2. `load` 只能为 `eager` 或 `lazy` 其中一项
+3. `directory` 为此 library 位于的目录名，即 `libs/<directory>/<library>`，用于方便分类，可留空
+4. `scope` 为此 library 的领域，要么为此 library 的 project 名，要么为 `shared`，默认为 project 名
+5. `tags` 每一项格式为`name:value`，每一项之间使用 `,` 分隔，可留空
 
 提示：使用 `--dry-run` 来查看命令效果，而不令命令生效
 

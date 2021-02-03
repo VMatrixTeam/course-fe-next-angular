@@ -45,6 +45,12 @@
       "description": "Directory to the library",
       "x-prompt": "所属文件夹，可留空"
     },
+    "load": {
+      "type": "string",
+      "description": "Load type of the library",
+      "enum": ["eager", "lazy"],
+      "x-prompt": "加载类型"
+    },
     "scope": {
       "type": "string",
       "description": "Scope of the library",
@@ -56,5 +62,5 @@
       "x-prompt": "tag，用英文逗号分隔，可留空"
     }
   },
-  "required": ["name", "type"]
+  "required": ["name", "type", "load"]
 }
