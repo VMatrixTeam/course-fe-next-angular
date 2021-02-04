@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { UntilDestroy } from '@ngneat/until-destroy';
 import { PrimeNGConfig } from 'primeng/api';
 
 @Component({
@@ -7,6 +8,7 @@ import { PrimeNGConfig } from 'primeng/api';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
+@UntilDestroy()
 export class AppComponent {
   constructor(private readonly primengConfig: PrimeNGConfig) {
     this.primengConfig.ripple = true;

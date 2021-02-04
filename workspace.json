@@ -17,8 +17,24 @@
             "tsConfig": "apps/student-app/tsconfig.app.json",
             "aot": true,
             "assets": ["apps/student-app/src/favicon.ico", "apps/student-app/src/assets"],
-            "styles": ["apps/student-app/src/styles.css"],
+            "styles": [
+              "apps/student-app/src/styles.css",
+              { "input": "node_modules/tailwindcss/base.css", "bundleName": "tailwindcss" },
+              { "input": "node_modules/tailwindcss/components.css", "bundleName": "tailwindcss" },
+              { "input": "node_modules/tailwindcss/utilities.css", "bundleName": "tailwindcss" },
+              { "input": "node_modules/primeicons/primeicons.css", "bundleName": "primeicons" },
+              { "input": "node_modules/primeng/resources/primeng.min.css", "bundleName": "primeng" },
+              { "input": "node_modules/primeng/resources/themes/saga-blue/theme.css", "bundleName": "primeng" }
+            ],
             "scripts": [],
+            "optimization": {
+              "scripts": true,
+              "styles": {
+                "minify": true,
+                "inlineCritical": true
+              },
+              "fonts": true
+            },
             "customWebpackConfig": {
               "path": "webpack.config.js"
             },
@@ -36,7 +52,8 @@
               "outputHashing": "all",
               "sourceMap": true,
               "namedChunks": false,
-              "extractLicenses": false,
+              "extractLicenses": true,
+              "aot": true,
               "vendorChunk": true,
               "buildOptimizer": true,
               "budgets": [
@@ -148,6 +165,20 @@
           "builder": "@nrwl/linter:eslint",
           "options": {
             "lintFilePatterns": ["libs/shared/util-rx/src/**/*.ts", "libs/shared/util-rx/src/**/*.html"]
+          }
+        }
+      }
+    },
+    "shared-util-directive": {
+      "projectType": "library",
+      "root": "libs/shared/util-directive",
+      "sourceRoot": "libs/shared/util-directive/src",
+      "prefix": "app",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/shared/util-directive/src/**/*.ts", "libs/shared/util-directive/src/**/*.html"]
           }
         }
       }

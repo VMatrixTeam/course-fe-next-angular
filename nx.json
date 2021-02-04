@@ -37,6 +37,9 @@
     },
     "shared-util-rx": {
       "tags": ["load:eager", "scope:shared", "type:util"]
+    },
+    "shared-util-directive": {
+      "tags": ["load:eager", "scope:shared", "type:util"]
     }
   }
 }

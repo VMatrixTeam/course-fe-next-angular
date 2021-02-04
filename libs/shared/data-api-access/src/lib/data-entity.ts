@@ -1,7 +1,7 @@
 import { HttpParams } from '@angular/common/http';
 import { RxState } from '@rx-angular/state';
 import { ReplaySubject } from 'rxjs';
-import { AsyncActionState } from './async-action-state';
+import { AsyncActionStatus } from './async-action-status';
 import { DataApiAccessService, ObjectType, ObjectTypeConstructor } from './data-api-access.service';
 
 /**
@@ -71,25 +71,25 @@ export class DataEntityConfiguration<T extends ObjectTypeConstructor<any>> {
  * @template T
  */
 export class DataEntity<T extends ObjectType> extends RxState<T> {
-  private readonly getSubject = new ReplaySubject<AsyncActionState>(1);
+  private readonly getSubject = new ReplaySubject<AsyncActionStatus>(1);
 
-  private readonly postSubject = new ReplaySubject<AsyncActionState>(1);
+  private readonly postSubject = new ReplaySubject<AsyncActionStatus>(1);
 
   /**
    * 一个反应此实体当前进行的GET请求动作的状态的流，注意它具有重放机制，重放个数为1
    *
-   * 参见{@link AsyncActionState}
+   * 参见{@link AsyncActionStatus}
    *
-   * @see AsyncActionState
+   * @see AsyncActionStatus
    */
   readonly get$ = this.getSubject.asObservable();
 
   /**
    * 一个反应此实体当前进行的POST请求动作的状态的流，注意它具有重放机制，重放个数为1
    *
-   * 参见{@link AsyncActionState}
+   * 参见{@link AsyncActionStatus}
    *
-   * @see AsyncActionState
+   * @see AsyncActionStatus
    */
   readonly post$ = this.postSubject.asObservable();
 
@@ -112,7 +112,7 @@ export class DataEntity<T extends ObjectType> extends RxState<T> {
    * @param {HttpParams} params 请求参数
    */
   doGet(params?: HttpParams) {
-    this.getSubject.next(new AsyncActionState('loading'));
+    this.getSubject.next(new AsyncActionStatus('loading'));
     this.dataApiAccessService
       .get({
         path: this.configuration.endpoints.getPath,
@@ -120,8 +120,8 @@ export class DataEntity<T extends ObjectType> extends RxState<T> {
         responseType: this.configuration.typeConstructor
       })
       .subscribe({
-        error: (err) => this.getSubject.next(new AsyncActionState('error', err)),
-        complete: () => this.getSubject.next(new AsyncActionState('completed'))
+        error: (err) => this.getSubject.next(new AsyncActionStatus('error', err)),
+        complete: () => this.getSubject.next(new AsyncActionStatus('completed'))
       });
   }
 
@@ -134,7 +134,7 @@ export class DataEntity<T extends ObjectType> extends RxState<T> {
    * @param {HttpParams} params 请求参数
    */
   doPost(payload?: ObjectType, params?: HttpParams) {
-    this.postSubject.next(new AsyncActionState('loading'));
+    this.postSubject.next(new AsyncActionStatus('loading'));
     this.dataApiAccessService
       .post({
         path: this.configuration.endpoints.getPath,
@@ -143,8 +143,8 @@ export class DataEntity<T extends ObjectType> extends RxState<T> {
         payload
       })
       .subscribe({
-        error: (err) => this.postSubject.next(new AsyncActionState('error', err)),
-        complete: () => this.postSubject.next(new AsyncActionState('completed'))
+        error: (err) => this.postSubject.next(new AsyncActionStatus('error', err)),
+        complete: () => this.postSubject.next(new AsyncActionStatus('completed'))
       });
   }
 }

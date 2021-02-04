@@ -5,8 +5,8 @@
   "scripts": {
     "nx": "nx",
     "prod:install": "NODE_ENV=production npm ci",
-    "prod:build": "nx build --prod",
-    "prod:affected:build": "nx affected:build --prod",
+    "prod:build": "NODE_ENV=production nx build --prod",
+    "prod:affected:build": "NODE_ENV=production nx affected:build --prod",
     "compodoc": "nx run tools-stub:compodoc",
     "compodoc:watch-serve": "nx run tools-stub:compodoc --watch --serve",
     "all:lint": "nx workspace-lint && nx run-many --target=lint --all --parallel --maxParallel=8",
@@ -42,6 +42,7 @@
     "@angular/platform-browser-dynamic": "^11.0.0",
     "@angular/router": "^11.0.0",
     "@ngneat/tailwind": "^6.0.0",
+    "@ngneat/until-destroy": "^8.0.3",
     "@rx-angular/state": "^1.4.3",
     "@rx-angular/template": "^1.0.0-beta.4",
     "backoff-rxjs": "^6.5.7",
