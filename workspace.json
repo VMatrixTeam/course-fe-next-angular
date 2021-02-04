@@ -22,7 +22,7 @@
               { "input": "node_modules/tailwindcss/base.css", "bundleName": "tailwindcss" },
               { "input": "node_modules/tailwindcss/components.css", "bundleName": "tailwindcss" },
               { "input": "node_modules/tailwindcss/utilities.css", "bundleName": "tailwindcss" },
-              { "input": "node_modules/primeicons/primeicons.css", "bundleName": "primeicons" },
+              { "input": "node_modules/primeicons/primeicons.css", "bundleName": "primeng" },
               { "input": "node_modules/primeng/resources/primeng.min.css", "bundleName": "primeng" },
               { "input": "node_modules/primeng/resources/themes/saga-blue/theme.css", "bundleName": "primeng" }
             ],
