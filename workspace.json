@@ -27,14 +27,6 @@
               { "input": "node_modules/primeng/resources/themes/saga-blue/theme.css", "bundleName": "primeng" }
             ],
             "scripts": [],
-            "optimization": {
-              "scripts": true,
-              "styles": {
-                "minify": true,
-                "inlineCritical": true
-              },
-              "fonts": true
-            },
             "customWebpackConfig": {
               "path": "webpack.config.js"
             },
