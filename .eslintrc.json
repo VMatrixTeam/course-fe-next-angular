@@ -74,6 +74,7 @@
             "alphabetize": { "order": "asc", "caseInsensitive": true }
           }
         ],
+        "import/no-relative-parent-imports": "error",
         "prefer-arrow/prefer-arrow-functions": [
           "error",
           {
@@ -96,22 +97,6 @@
               {
                 "sourceTag": "load:lazy",
                 "onlyDependOnLibsWithTags": ["load:eager"]
-              },
-              {
-                "sourceTag": "type:ui",
-                "onlyDependOnLibsWithTags": ["type:ui", "type:util"]
-              },
-              {
-                "sourceTag": "type:data-access",
-                "onlyDependOnLibsWithTags": ["type:data-access", "type:util"]
-              },
-              {
-                "sourceTag": "type:feature",
-                "onlyDependOnLibsWithTags": ["type:ui", "type:data-access", "type:util"]
-              },
-              {
-                "sourceTag": "type:util",
-                "onlyDependOnLibsWithTags": ["type:util"]
               },
               {
                 "sourceTag": "scope:student-app",

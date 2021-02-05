@@ -11,6 +11,7 @@
     "compodoc:watch-serve": "nx run tools-stub:compodoc --watch --serve",
     "all:lint": "nx workspace-lint && nx run-many --target=lint --all --parallel --maxParallel=8",
     "affected:lint": "nx workspace-lint && nx affected:lint --parallel --maxParallel=8",
+    "affected:lint-and-fix": "nx affected:lint --parallel --maxParallel=8 --fix",
     "start": "nx serve --hmr --ssl",
     "test": "nx test",
     "e2e": "nx e2e",

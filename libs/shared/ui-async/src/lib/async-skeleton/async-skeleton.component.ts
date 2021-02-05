@@ -8,6 +8,4 @@ import { UntilDestroy } from '@ngneat/until-destroy';
   templateUrl: './async-skeleton.component.html',
   styleUrls: ['./async-skeleton.component.css']
 })
-export class AsyncSkeletonComponent {
-
-}
+export class AsyncSkeletonComponent {}

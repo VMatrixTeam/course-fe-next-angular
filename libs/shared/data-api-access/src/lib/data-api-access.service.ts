@@ -139,6 +139,17 @@ export class DataApiAccessService {
    */
   constructor(private readonly httpClient: HttpClient) {}
 
+  private handleApiAccess<T extends ObjectType>(
+    request: Observable<T>,
+    timeoutMs: number,
+    responseType?: ObjectTypeConstructor<T>
+  ) {
+    return request.pipe(
+      timeout(timeoutMs),
+      map((response) => (!responseType ? response : this.jsonConvert.deserializeObject(response, responseType)))
+    );
+  }
+
   /**
    * 执行 HTTP GET 请求
    *
@@ -178,17 +189,6 @@ export class DataApiAccessService {
         params: aggregated.params
       }),
       aggregated.timeoutMs
-    );
-  }
-
-  private handleApiAccess<T extends ObjectType>(
-    request: Observable<T>,
-    timeoutMs: number,
-    responseType?: ObjectTypeConstructor<T>
-  ) {
-    return request.pipe(
-      timeout(timeoutMs),
-      map((response) => (!responseType ? response : this.jsonConvert.deserializeObject(response, responseType)))
     );
   }
 }
