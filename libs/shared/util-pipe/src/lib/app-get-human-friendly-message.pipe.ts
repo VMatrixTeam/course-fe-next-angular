@@ -1,7 +1,7 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import { EncapsulatedApiError, isEncapsulatedApiError } from '@course-fe-next/shared/data-api-access';
 
-@Pipe({ name: 'appGetHumanFriendlyMessage', pure: true })
+@Pipe({ pure: true, name: 'appGetHumanFriendlyMessage' })
 export class AppGetHumanFriendlyMessagePipe implements PipeTransform {
   transform(value: Error | EncapsulatedApiError | any) {
     if (value instanceof Error) {
