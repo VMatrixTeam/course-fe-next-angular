@@ -202,9 +202,9 @@
               "protected-field",
               "public-field",
               "constructor",
-              "public-method",
+              "private-method",
               "protected-method",
-              "private-method"
+              "public-method"
             ],
             "classExpressions": ["field", "constructor", "method"],
             "interfaces": ["signature", "field", "constructor", "method"],

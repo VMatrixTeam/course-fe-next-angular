@@ -1,8 +1,52 @@
 import { HttpParams } from '@angular/common/http';
 import { RxState } from '@rx-angular/state';
-import { ReplaySubject } from 'rxjs';
-import { AsyncActionStatus } from './async-action-status';
+import { merge, Observable, of, Subject } from 'rxjs';
+import { catchError, mapTo, share, switchMap } from 'rxjs/operators';
 import { DataApiAccessService, ObjectType, ObjectTypeConstructor } from './data-api-access.service';
+
+/**
+ * 异步动作的状态类型，只有三种状态
+ */
+export type AsyncActionStatusType = 'loading' | 'error' | 'completed';
+
+/**
+ * 封装异步动作的状态，仅当`type`为`error`时，`error`值才会被给定
+ */
+export class AsyncActionStatus {
+  constructor(readonly type: AsyncActionStatusType, readonly error?: any) {}
+}
+
+/**
+ * @internal
+ * @ignore
+ */
+class RequestActionStream<T, U extends ObjectType> {
+  private readonly trigger = new Subject<T>();
+
+  readonly responseEntity$: Observable<U>;
+
+  readonly status$: Observable<AsyncActionStatus>;
+
+  constructor(switchMapper: (data: T) => Observable<U>) {
+    const request$ = this.trigger.pipe(switchMap(switchMapper));
+    this.responseEntity$ = request$.pipe(share());
+    this.status$ = merge(
+      this.trigger.pipe(mapTo(new AsyncActionStatus('loading'))),
+      request$.pipe(
+        mapTo(new AsyncActionStatus('completed')),
+        catchError((err) => of(new AsyncActionStatus('error', err)))
+      )
+    ).pipe(share());
+  }
+
+  invoke(params: T) {
+    this.trigger.next(params);
+  }
+
+  destroy() {
+    this.trigger.complete();
+  }
+}
 
 /**
  * 表示在给定的HTTP方法下，实体对应的REST Api Endpoint地址，不需要带任何像`/api`这样的前缀
@@ -71,27 +115,41 @@ export class DataEntityConfiguration<T extends ObjectTypeConstructor<any>> {
  * @template T
  */
 export class DataEntity<T extends ObjectType> extends RxState<T> {
-  private readonly getSubject = new ReplaySubject<AsyncActionStatus>(1);
+  private readonly getStream = new RequestActionStream<HttpParams | undefined, T>((params) =>
+    this.dataApiAccessService.get({
+      path: this.configuration.endpoints.getPath,
+      params,
+      responseType: this.configuration.typeConstructor
+    })
+  );
 
-  private readonly postSubject = new ReplaySubject<AsyncActionStatus>(1);
+  private readonly postStream = new RequestActionStream<[payload?: ObjectType, params?: HttpParams], T>(
+    ([payload, params]) =>
+      this.dataApiAccessService.post({
+        path: this.configuration.endpoints.getPath,
+        params,
+        responseType: this.configuration.typeConstructor,
+        payload
+      })
+  );
 
   /**
-   * 一个反应此实体当前进行的GET请求动作的状态的流，注意它具有重放机制，重放个数为1
+   * 一个反映此实体当前进行的GET请求动作的状态的流，注意它具有重放机制，重放个数为1
    *
    * 参见{@link AsyncActionStatus}
    *
    * @see AsyncActionStatus
    */
-  readonly get$ = this.getSubject.asObservable();
+  readonly get$ = this.getStream.status$;
 
   /**
-   * 一个反应此实体当前进行的POST请求动作的状态的流，注意它具有重放机制，重放个数为1
+   * 一个反映此实体当前进行的POST请求动作的状态的流，注意它具有重放机制，重放个数为1
    *
    * 参见{@link AsyncActionStatus}
    *
    * @see AsyncActionStatus
    */
-  readonly post$ = this.postSubject.asObservable();
+  readonly post$ = this.postStream.status$;
 
   /**
    * @internal
@@ -112,17 +170,7 @@ export class DataEntity<T extends ObjectType> extends RxState<T> {
    * @param {HttpParams} params 请求参数
    */
   doGet(params?: HttpParams) {
-    this.getSubject.next(new AsyncActionStatus('loading'));
-    this.dataApiAccessService
-      .get({
-        path: this.configuration.endpoints.getPath,
-        params,
-        responseType: this.configuration.typeConstructor
-      })
-      .subscribe({
-        error: (err) => this.getSubject.next(new AsyncActionStatus('error', err)),
-        complete: () => this.getSubject.next(new AsyncActionStatus('completed'))
-      });
+    this.getStream.invoke(params);
   }
 
   /**
@@ -134,17 +182,11 @@ export class DataEntity<T extends ObjectType> extends RxState<T> {
    * @param {HttpParams} params 请求参数
    */
   doPost(payload?: ObjectType, params?: HttpParams) {
-    this.postSubject.next(new AsyncActionStatus('loading'));
-    this.dataApiAccessService
-      .post({
-        path: this.configuration.endpoints.getPath,
-        params,
-        responseType: this.configuration.typeConstructor,
-        payload
-      })
-      .subscribe({
-        error: (err) => this.postSubject.next(new AsyncActionStatus('error', err)),
-        complete: () => this.postSubject.next(new AsyncActionStatus('completed'))
-      });
+    this.postStream.invoke([payload, params]);
+  }
+
+  destroy() {
+    this.getStream.destroy();
+    this.postStream.destroy();
   }
 }
