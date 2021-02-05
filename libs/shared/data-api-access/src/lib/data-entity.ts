@@ -1,50 +1,68 @@
 import { HttpParams } from '@angular/common/http';
 import { RxState } from '@rx-angular/state';
 import { merge, Observable, of, Subject } from 'rxjs';
-import { catchError, mapTo, share, switchMap } from 'rxjs/operators';
+import { catchError, mapTo, shareReplay, startWith, switchMap } from 'rxjs/operators';
 import { DataApiAccessService, ObjectType, ObjectTypeConstructor } from './data-api-access.service';
 
 /**
- * 异步动作的状态类型，只有三种状态
+ * 封装异步动作流的状态
  */
-export type AsyncActionStatusType = 'loading' | 'error' | 'completed';
+export class AsyncActionStreamStatus {
+  /**
+   * 表示异步动作流当前有动作正在进行
+   */
+  readonly isActive: boolean;
 
-/**
- * 封装异步动作的状态，仅当`type`为`error`时，`error`值才会被给定
- */
-export class AsyncActionStatus {
-  constructor(readonly type: AsyncActionStatusType, readonly error?: any) {}
+  /**
+   * 表示异步动作流当前没有动作正在进行，且上一次进行的动作失败
+   */
+  readonly isErrored: boolean;
+
+  /**
+   * 表示异步动作流当前没有动作正在进行
+   */
+  readonly isIdle: boolean;
+
+  /**
+   * @ignore
+   * @internal
+   */
+  constructor(active: boolean, readonly error?: any) {
+    this.isActive = active;
+    this.isErrored = !active && !!error;
+    this.isIdle = !active;
+  }
 }
 
 /**
  * @internal
  * @ignore
  */
-class RequestActionStream<T, U extends ObjectType> {
-  private readonly trigger = new Subject<T>();
+class AsyncActionStream<T, U extends ObjectType> {
+  private readonly invoker = new Subject<T>();
 
   readonly responseEntity$: Observable<U>;
 
-  readonly status$: Observable<AsyncActionStatus>;
+  readonly status$: Observable<AsyncActionStreamStatus>;
 
   constructor(switchMapper: (data: T) => Observable<U>) {
-    const request$ = this.trigger.pipe(switchMap(switchMapper));
-    this.responseEntity$ = request$.pipe(share());
+    const request$ = this.invoker.pipe(switchMap(switchMapper));
+    this.responseEntity$ = request$.pipe(shareReplay(1));
     this.status$ = merge(
-      this.trigger.pipe(mapTo(new AsyncActionStatus('loading'))),
+      this.invoker.pipe(mapTo(new AsyncActionStreamStatus(true))),
       request$.pipe(
-        mapTo(new AsyncActionStatus('completed')),
-        catchError((err) => of(new AsyncActionStatus('error', err)))
+        mapTo(new AsyncActionStreamStatus(false)),
+        catchError((err) => of(new AsyncActionStreamStatus(false, err)))
       )
-    ).pipe(share());
+    ).pipe(startWith(new AsyncActionStreamStatus(false)), shareReplay(1));
   }
 
   invoke(params: T) {
-    this.trigger.next(params);
+    this.invoker.next(params);
   }
 
   destroy() {
-    this.trigger.complete();
+    this.invoker.complete();
   }
 }
 
@@ -115,7 +133,7 @@ export class DataEntityConfiguration<T extends ObjectTypeConstructor<any>> {
  * @template T
  */
 export class DataEntity<T extends ObjectType> extends RxState<T> {
-  private readonly getStream = new RequestActionStream<HttpParams | undefined, T>((params) =>
+  private readonly getStream = new AsyncActionStream<HttpParams | undefined, T>((params) =>
     this.dataApiAccessService.get({
       path: this.configuration.endpoints.getPath,
       params,
@@ -123,7 +141,7 @@ export class DataEntity<T extends ObjectType> extends RxState<T> {
     })
   );
 
-  private readonly postStream = new RequestActionStream<[payload?: ObjectType, params?: HttpParams], T>(
+  private readonly postStream = new AsyncActionStream<[payload?: ObjectType, params?: HttpParams], T>(
     ([payload, params]) =>
       this.dataApiAccessService.post({
         path: this.configuration.endpoints.getPath,
@@ -136,18 +154,22 @@ export class DataEntity<T extends ObjectType> extends RxState<T> {
   /**
    * 一个反映此实体当前进行的GET请求动作的状态的流，注意它具有重放机制，重放个数为1
    *
-   * 参见{@link AsyncActionStatus}
+   * 对于一个刚刚初始化的异步动作流，它默认会释放一个`isIdle === true`的状态对象
    *
-   * @see AsyncActionStatus
+   * 参见{@link AsyncActionStreamStatus}
+   *
+   * @see AsyncActionStreamStatus
    */
   readonly get$ = this.getStream.status$;
 
   /**
    * 一个反映此实体当前进行的POST请求动作的状态的流，注意它具有重放机制，重放个数为1
    *
-   * 参见{@link AsyncActionStatus}
+   * 对于一个刚刚初始化的异步动作流，它默认会释放一个`isIdle === true`的状态对象
    *
-   * @see AsyncActionStatus
+   * 参见{@link AsyncActionStreamStatus}
+   *
+   * @see AsyncActionStreamStatus
    */
   readonly post$ = this.postStream.status$;
 
@@ -185,6 +207,9 @@ export class DataEntity<T extends ObjectType> extends RxState<T> {
     this.postStream.invoke([payload, params]);
   }
 
+  /**
+   * 销毁此对象，这会释放所有的异步动作流，包括对他们持有的{@link Subject}进行`complete()`操作
+   */
   destroy() {
     this.getStream.destroy();
     this.postStream.destroy();

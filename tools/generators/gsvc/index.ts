@@ -15,6 +15,8 @@ import { getProjectConfig } from '@nrwl/workspace';
 import * as strings from '@nrwl/workspace/src/utils/strings';
 
 export default function (schema: any) {
+  console.log('');
+  console.log('走你 ┏ (゜ω゜)=☞');
   return (tree: Tree, context: SchematicContext) => {
     const config = getProjectConfig(tree, schema.project);
     schema.path ||= join(config.sourceRoot, config.projectType === 'application' ? 'app' : 'lib');

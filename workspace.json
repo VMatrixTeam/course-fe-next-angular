@@ -19,12 +19,30 @@
             "assets": ["apps/student-app/src/favicon.ico", "apps/student-app/src/assets"],
             "styles": [
               "apps/student-app/src/styles.css",
-              { "input": "node_modules/tailwindcss/base.css", "bundleName": "tailwindcss" },
-              { "input": "node_modules/tailwindcss/components.css", "bundleName": "tailwindcss" },
-              { "input": "node_modules/tailwindcss/utilities.css", "bundleName": "tailwindcss" },
-              { "input": "node_modules/primeicons/primeicons.css", "bundleName": "primeng" },
-              { "input": "node_modules/primeng/resources/primeng.min.css", "bundleName": "primeng" },
-              { "input": "node_modules/primeng/resources/themes/saga-blue/theme.css", "bundleName": "primeng" }
+              {
+                "input": "node_modules/tailwindcss/base.css",
+                "bundleName": "tailwindcss"
+              },
+              {
+                "input": "node_modules/tailwindcss/components.css",
+                "bundleName": "tailwindcss"
+              },
+              {
+                "input": "node_modules/tailwindcss/utilities.css",
+                "bundleName": "tailwindcss"
+              },
+              {
+                "input": "node_modules/primeicons/primeicons.css",
+                "bundleName": "primeng"
+              },
+              {
+                "input": "node_modules/primeng/resources/primeng.min.css",
+                "bundleName": "primeng"
+              },
+              {
+                "input": "node_modules/primeng/resources/themes/saga-blue/theme.css",
+                "bundleName": "primeng"
+              }
             ],
             "scripts": [],
             "customWebpackConfig": {
@@ -161,16 +179,30 @@
         }
       }
     },
-    "shared-util-directive": {
+    "shared-ui-async": {
       "projectType": "library",
-      "root": "libs/shared/util-directive",
-      "sourceRoot": "libs/shared/util-directive/src",
+      "root": "libs/shared/ui-async",
+      "sourceRoot": "libs/shared/ui-async/src",
       "prefix": "app",
       "architect": {
         "lint": {
           "builder": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": ["libs/shared/util-directive/src/**/*.ts", "libs/shared/util-directive/src/**/*.html"]
+            "lintFilePatterns": ["libs/shared/ui-async/src/**/*.ts", "libs/shared/ui-async/src/**/*.html"]
+          }
+        }
+      }
+    },
+    "shared-util-pipe": {
+      "projectType": "library",
+      "root": "libs/shared/util-pipe",
+      "sourceRoot": "libs/shared/util-pipe/src",
+      "prefix": "app",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/shared/util-pipe/src/**/*.ts", "libs/shared/util-pipe/src/**/*.html"]
           }
         }
       }

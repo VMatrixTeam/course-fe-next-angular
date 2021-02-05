@@ -38,7 +38,10 @@
     "shared-util-rx": {
       "tags": ["load:eager", "scope:shared", "type:util"]
     },
-    "shared-util-directive": {
+    "shared-ui-async": {
+      "tags": ["load:eager", "scope:shared", "type:ui"]
+    },
+    "shared-util-pipe": {
       "tags": ["load:eager", "scope:shared", "type:util"]
     }
   }

@@ -3,6 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
 import { DataApiAccessModule } from '@course-fe-next/shared/data-api-access';
+import { ButtonModule } from 'primeng/button';
 import { AppComponent } from './app.component';
 
 @NgModule({
@@ -15,7 +16,8 @@ import { AppComponent } from './app.component';
       scrollPositionRestoration: 'enabled',
       anchorScrolling: 'enabled'
     }),
-    DataApiAccessModule
+    DataApiAccessModule,
+    ButtonModule
   ],
   bootstrap: [AppComponent]
 })

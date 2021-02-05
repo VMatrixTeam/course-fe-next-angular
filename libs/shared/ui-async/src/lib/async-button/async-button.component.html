@@ -1,0 +1,23 @@
+<ng-container *rxLet="streamStatus; let status">
+  <button
+    *ngIf="status.isActive"
+    pButton
+    pRipple
+    [ngClass]="buttonClasses"
+    [label]="text"
+    [icon]="'pi-spinner'"
+    [disabled]="true"
+  ></button>
+  <button
+    *ngIf="status.isErrored"
+    pButton
+    pRipple
+    [ngClass]="buttonClasses"
+    [label]="text"
+    icon="pi-times"
+    [pTooltip]="status.error | appGetHumanFriendlyMessage"
+    tooltipPosition="bottom"
+    tooltipEvent="focus"
+  ></button>
+  <button *ngIf="status.isIdle" pButton pRipple [className]="buttonClasses" [label]="text"></button>
+</ng-container>

@@ -1,11 +1,4 @@
-import {
-  Tree,
-  names,
-  formatFiles,
-  installPackagesTask,
-  updateJson,
-  getWorkspaceLayout
-} from '@nrwl/devkit';
+import { Tree, names, formatFiles, installPackagesTask, updateJson, getWorkspaceLayout } from '@nrwl/devkit';
 import { libraryGenerator } from '@nrwl/angular/src/schematics/library/library';
 import { dasherize } from '@nrwl/workspace/src/utils/strings';
 import { join } from 'path';
@@ -33,12 +26,13 @@ export default async function (tree: Tree, schema: any) {
     }
   }
 
+  console.log('');
+  console.log('走你 ┏ (゜ω゜)=☞');
+
   await libraryGenerator(tree, {
     name: schema.name,
     directory: schema.directory,
-    tags: `load:${schema.load},scope:${scope},type:${schema.type}${
-      schema.tags ? `,${schema.tags}` : ''
-    }`,
+    tags: `load:${schema.load},scope:${scope},type:${schema.type}${schema.tags ? `,${schema.tags}` : ''}`,
     simpleModuleName: true,
     style: 'css',
     strict: true,
