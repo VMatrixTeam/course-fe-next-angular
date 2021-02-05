@@ -182,6 +182,8 @@ export class DataEntity<T extends ObjectType> extends RxState<T> {
     private readonly configuration: DataEntityConfiguration<ObjectTypeConstructor<T>>
   ) {
     super();
+    this.connect(this.getStream.responseEntity$);
+    this.connect(this.postStream.responseEntity$);
   }
 
   /**
