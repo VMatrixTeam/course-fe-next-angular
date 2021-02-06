@@ -1,6 +1,7 @@
 export * from './lib/data-api-access.module';
-export * from './lib/data-entity';
+export * from './lib/data-api-access.service';
+export * from './lib/async-request-state';
 export * from './lib/api/api-error';
-export { AsyncActionStream } from './lib/async-action-stream';
-export { AsyncActionStreamStatus } from './lib/async-action-stream';
-export { AsyncRequestState } from './lib/async-action-status';
+export * from './lib/api/api-entity';
+export * from './lib/api/api-response';
+export * from './lib/api/api-type';

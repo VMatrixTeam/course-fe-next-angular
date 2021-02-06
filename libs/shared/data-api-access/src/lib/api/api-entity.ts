@@ -1,11 +1,9 @@
 import { HttpParams } from '@angular/common/http';
+import { AsyncRequestState, DataApiAccessService } from '@course-fe-next/shared/data-api-access';
 import { RxState } from '@rx-angular/state';
 import { Observable, Subject } from 'rxjs';
 import { filter, map, shareReplay, switchMap } from 'rxjs/operators';
-import { ApiResponse } from './api-response';
-import { AsyncRequestState } from '../async-request-state';
-import { DataApiAccessService } from '../data-api-access.service';
-import { ApiResponseBody, ApiResponseBodyTypeConstructor, ApiRequestBody } from './api-type';
+import { ApiResponseBody, ApiResponseBodyTypeConstructor } from './api-type';
 
 class AsyncRequestStream<P, R extends ApiResponseBody> {
   private readonly invoker = new Subject<P>();
@@ -101,20 +99,13 @@ export class DataEntityConfiguration<T extends ApiResponseBodyTypeConstructor<an
  */
 export class ApiEntity<T extends ApiResponseBody> extends RxState<T> {
   private readonly getStream = new AsyncRequestStream<HttpParams | undefined, T>((params) =>
-    this.dataApiAccessService.getWithStateStream({
-      path: this.configuration.endpoints.getPath,
-      params,
-      responseType: this.configuration.typeConstructor
-    })
-  );
-
-  private readonly postStream = new AsyncRequestStream<[payload?: ApiRequestBody, params?: HttpParams], ApiResponse>(
-    ([payload, params]) =>
-      this.dataApiAccessService.postWithStateStream({
+    this.dataApiAccessService.getAsSharedStateStream(
+      {
         path: this.configuration.endpoints.getPath,
-        params,
-        payload
-      })
+        params
+      },
+      this.configuration.typeConstructor
+    )
   );
 
   /**
@@ -127,17 +118,6 @@ export class ApiEntity<T extends ApiResponseBody> extends RxState<T> {
    * @see AsyncRequestState
    */
   readonly get$ = this.getStream.state$;
-
-  /**
-   * 一个反映此实体当前进行的POST请求动作的状态的流，注意它具有重放机制，重放个数为1
-   *
-   * 对于一个刚刚初始化的异步动作流，它默认会释放一个`isIdle === true`的状态对象
-   *
-   * 参见{@link AsyncRequestState}
-   *
-   * @see AsyncRequestState
-   */
-  readonly post$ = this.postStream.state$;
 
   /**
    * @internal
@@ -163,22 +143,9 @@ export class ApiEntity<T extends ApiResponseBody> extends RxState<T> {
   }
 
   /**
-   * 向这个实体对应的REST Api Endpoint发出POST请求
-   *
-   * 注意，这是一个同步方法，既不返回`Observable`，也不返回`Promise`，请求是否完成或者是否发生错误会被同步到{@link post$}
-   *
-   * @param {ApiRequestBody} payload 请求体内容
-   * @param {HttpParams} params 请求参数
-   */
-  doPost(payload?: ApiRequestBody, params?: HttpParams) {
-    this.postStream.invoke([payload, params]);
-  }
-
-  /**
    * 销毁此对象，这会释放所有的异步动作流，包括对他们持有的{@link Subject}进行`complete()`操作
    */
   destroy() {
     this.getStream.destroy();
-    this.postStream.destroy();
   }
 }
