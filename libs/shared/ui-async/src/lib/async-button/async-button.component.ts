@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 // FIXME: typescript-eslint bug here
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { AsyncActionStreamStatus } from '@course-fe-next/shared/data-api-access';
+import { AsyncRequestState } from '@course-fe-next/shared/data-api-access';
 import { UntilDestroy } from '@ngneat/until-destroy';
 import { Observable } from 'rxjs';
 
@@ -17,7 +17,7 @@ export class AsyncButtonComponent {
   text!: string;
 
   @Input()
-  streamStatus!: Observable<AsyncActionStreamStatus>;
+  requestState$!: Observable<AsyncRequestState>;
 
   @Input()
   buttonClasses!: string;

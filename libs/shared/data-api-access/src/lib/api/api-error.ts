@@ -1,6 +1,6 @@
 // FIXME: a typescript-eslint bug
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import type { DataApiAccessService } from './data-api-access.service';
+import type { DataApiAccessService } from '../data-api-access.service';
 
 /**
  * 表示封装了{@link ApiError}作为`apiError`属性的`Error`对象

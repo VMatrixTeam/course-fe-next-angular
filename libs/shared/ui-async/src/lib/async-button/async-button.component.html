@@ -1,6 +1,6 @@
-<ng-container *rxLet="streamStatus; let status">
+<ng-container *rxLet="requestState$; let status">
   <button
-    *ngIf="status.isActive"
+    *ngIf="status.active"
     pButton
     pRipple
     [ngClass]="buttonClasses"
@@ -9,7 +9,7 @@
     [disabled]="true"
   ></button>
   <button
-    *ngIf="status.isErrored"
+    *ngIf="status.failed"
     pButton
     pRipple
     [ngClass]="buttonClasses"
@@ -19,5 +19,5 @@
     tooltipPosition="bottom"
     tooltipEvent="focus"
   ></button>
-  <button *ngIf="status.isIdle" pButton pRipple [className]="buttonClasses" [label]="text"></button>
+  <button *ngIf="status.completed" pButton pRipple [className]="buttonClasses" [label]="text"></button>
 </ng-container>

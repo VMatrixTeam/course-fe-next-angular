@@ -1,63 +1,30 @@
 import { HttpParams } from '@angular/common/http';
 import { RxState } from '@rx-angular/state';
-import { merge, Observable, of, Subject } from 'rxjs';
-import { catchError, mapTo, shareReplay, startWith, switchMap } from 'rxjs/operators';
-import { DataApiAccessService, ObjectType, ObjectTypeConstructor } from './data-api-access.service';
+import { Observable, Subject } from 'rxjs';
+import { filter, map, shareReplay, switchMap } from 'rxjs/operators';
+import { ApiResponse } from './api-response';
+import { AsyncRequestState } from '../async-request-state';
+import { DataApiAccessService } from '../data-api-access.service';
+import { ApiResponseBody, ApiResponseBodyTypeConstructor, ApiRequestBody } from './api-type';
 
-/**
- * 封装异步动作流的状态
- */
-export class AsyncActionStreamStatus {
-  /**
-   * 表示异步动作流当前有动作正在进行
-   */
-  readonly isActive: boolean;
+class AsyncRequestStream<P, R extends ApiResponseBody> {
+  private readonly invoker = new Subject<P>();
 
-  /**
-   * 表示异步动作流当前没有动作正在进行，且上一次进行的动作失败
-   */
-  readonly isErrored: boolean;
+  readonly response$: Observable<R>;
 
-  /**
-   * 表示异步动作流当前没有动作正在进行
-   */
-  readonly isIdle: boolean;
+  readonly state$: Observable<AsyncRequestState<R>>;
 
-  /**
-   * @ignore
-   * @internal
-   */
-  constructor(active: boolean, readonly error?: any) {
-    this.isActive = active;
-    this.isErrored = !active && !!error;
-    this.isIdle = !active;
-  }
-}
-
-/**
- * @internal
- * @ignore
- */
-class AsyncActionStream<T, U extends ObjectType> {
-  private readonly invoker = new Subject<T>();
-
-  readonly responseEntity$: Observable<U>;
-
-  readonly status$: Observable<AsyncActionStreamStatus>;
-
-  constructor(switchMapper: (data: T) => Observable<U>) {
-    const request$ = this.invoker.pipe(switchMap(switchMapper));
-    this.responseEntity$ = request$.pipe(shareReplay(1));
-    this.status$ = merge(
-      this.invoker.pipe(mapTo(new AsyncActionStreamStatus(true))),
-      request$.pipe(
-        mapTo(new AsyncActionStreamStatus(false)),
-        catchError((err) => of(new AsyncActionStreamStatus(false, err)))
-      )
-    ).pipe(startWith(new AsyncActionStreamStatus(false)), shareReplay(1));
+  constructor(requester: (params: P) => Observable<AsyncRequestState<R>>) {
+    const state$ = this.invoker.pipe(switchMap(requester));
+    this.response$ = state$.pipe(
+      filter((state) => state.completed),
+      map((state) => state.responseObject!),
+      shareReplay(1)
+    );
+    this.state$ = state$.pipe(shareReplay(1));
   }
 
-  invoke(params: T) {
+  invoke(params: P) {
     this.invoker.next(params);
   }
 
@@ -91,11 +58,11 @@ export class DataEntityEndpoints {
  *
  * @template T
  */
-export class DataEntityConfiguration<T extends ObjectTypeConstructor<any>> {
+export class DataEntityConfiguration<T extends ApiResponseBodyTypeConstructor<any>> {
   /**
-   * 表示此实体对应的数据类型的构造器，参见{@link ObjectTypeConstructor}
+   * 表示此实体对应的数据类型的构造器，参见{@link ApiResponseBodyTypeConstructor}
    *
-   * @see ObjectTypeConstructor
+   * @see ApiResponseBodyTypeConstructor
    */
   readonly typeConstructor!: T;
 
@@ -132,21 +99,20 @@ export class DataEntityConfiguration<T extends ObjectTypeConstructor<any>> {
  *
  * @template T
  */
-export class DataEntity<T extends ObjectType> extends RxState<T> {
-  private readonly getStream = new AsyncActionStream<HttpParams | undefined, T>((params) =>
-    this.dataApiAccessService.get({
+export class ApiEntity<T extends ApiResponseBody> extends RxState<T> {
+  private readonly getStream = new AsyncRequestStream<HttpParams | undefined, T>((params) =>
+    this.dataApiAccessService.getWithStateStream({
       path: this.configuration.endpoints.getPath,
       params,
       responseType: this.configuration.typeConstructor
     })
   );
 
-  private readonly postStream = new AsyncActionStream<[payload?: ObjectType, params?: HttpParams], T>(
+  private readonly postStream = new AsyncRequestStream<[payload?: ApiRequestBody, params?: HttpParams], ApiResponse>(
     ([payload, params]) =>
-      this.dataApiAccessService.post({
+      this.dataApiAccessService.postWithStateStream({
         path: this.configuration.endpoints.getPath,
         params,
-        responseType: this.configuration.typeConstructor,
         payload
       })
   );
@@ -156,22 +122,22 @@ export class DataEntity<T extends ObjectType> extends RxState<T> {
    *
    * 对于一个刚刚初始化的异步动作流，它默认会释放一个`isIdle === true`的状态对象
    *
-   * 参见{@link AsyncActionStreamStatus}
+   * 参见{@link AsyncRequestState}
    *
-   * @see AsyncActionStreamStatus
+   * @see AsyncRequestState
    */
-  readonly get$ = this.getStream.status$;
+  readonly get$ = this.getStream.state$;
 
   /**
    * 一个反映此实体当前进行的POST请求动作的状态的流，注意它具有重放机制，重放个数为1
    *
    * 对于一个刚刚初始化的异步动作流，它默认会释放一个`isIdle === true`的状态对象
    *
-   * 参见{@link AsyncActionStreamStatus}
+   * 参见{@link AsyncRequestState}
    *
-   * @see AsyncActionStreamStatus
+   * @see AsyncRequestState
    */
-  readonly post$ = this.postStream.status$;
+  readonly post$ = this.postStream.state$;
 
   /**
    * @internal
@@ -179,11 +145,10 @@ export class DataEntity<T extends ObjectType> extends RxState<T> {
    */
   constructor(
     private readonly dataApiAccessService: DataApiAccessService,
-    private readonly configuration: DataEntityConfiguration<ObjectTypeConstructor<T>>
+    private readonly configuration: DataEntityConfiguration<ApiResponseBodyTypeConstructor<T>>
   ) {
     super();
-    this.connect(this.getStream.responseEntity$);
-    this.connect(this.postStream.responseEntity$);
+    this.connect(this.getStream.response$);
   }
 
   /**
@@ -202,10 +167,10 @@ export class DataEntity<T extends ObjectType> extends RxState<T> {
    *
    * 注意，这是一个同步方法，既不返回`Observable`，也不返回`Promise`，请求是否完成或者是否发生错误会被同步到{@link post$}
    *
-   * @param {ObjectType} payload 请求体内容
+   * @param {ApiRequestBody} payload 请求体内容
    * @param {HttpParams} params 请求参数
    */
-  doPost(payload?: ObjectType, params?: HttpParams) {
+  doPost(payload?: ApiRequestBody, params?: HttpParams) {
     this.postStream.invoke([payload, params]);
   }
 

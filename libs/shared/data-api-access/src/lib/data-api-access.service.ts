@@ -2,29 +2,16 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { retryBackoff, RetryBackoffConfig } from 'backoff-rxjs';
 import { JsonConvert } from 'json2typescript';
-import { Observable } from 'rxjs';
-import { map, timeout } from 'rxjs/operators';
-
-/**
- * 表示对象类型，它的键值均为`string`类型，因此适合与JSON Object**相互**转换
- */
-export type ObjectType = Record<string, unknown>;
-
-/**
- * 表示构造函数，其中`T`表示构造函数的返回值，必须符合{@link ObjectType}
- *
- * 除了可以是我们自己用`class`声明出来的构造函数之外，
- * 还可以是ES原生类型：`String`、`Number`、`Boolean`等，注意开头大写
- *
- * @template T
- * @see {@link ObjectType}
- */
-export type ObjectTypeConstructor<T extends ObjectType> = new (...args: any[]) => T;
+import { Observable, of } from 'rxjs';
+import { catchError, map, startWith, timeout } from 'rxjs/operators';
+import { ApiResponse } from './api/api-response';
+import { AsyncRequestState } from './async-request-state';
+import { ApiRequestBody, ApiResponseBody, ApiResponseBodyTypeConstructor } from './api/api-type';
 
 /**
  * 包装请求参数的对象的基础接口，T见{@link ObjectTypeConstructor}
  */
-export interface BaseParameters<T extends ObjectType> {
+export interface BaseParameters {
   /**
    * 请求路径
    *
@@ -38,6 +25,23 @@ export interface BaseParameters<T extends ObjectType> {
    * @see {@link HttpParams}
    */
   params?: HttpParams;
+
+  /**
+   * 表示此请求期望在多少秒没有收到响应时算作失败，默认值见{@link DEFAULT_CONNECTION_TIMEOUT_MS}
+   */
+  timeoutMs?: number;
+}
+
+/**
+ * 包装GET请求的请求参数的对象接口
+ */
+export interface GetParameters<R extends ApiResponseBody> extends BaseParameters {
+  /**
+   * 指数退避重试配置，见{@link RetryBackoffConfig}
+   *
+   * 默认值见{@link DEFAULT_RETRY_BACKOFF_CONFIG}
+   */
+  retryConfig?: RetryBackoffConfig;
 
   /**
    * 期望的响应体JSON对应的`class`类型，不能使用`interface`或者`type`，因为它们会在编译后消失
@@ -54,52 +58,35 @@ export interface BaseParameters<T extends ObjectType> {
    * }
    * 此时即可令responseType为MyData
    *
-   * @see {@link TypeConstructor}
+   * @see {@link ApiResponseBodyTypeConstructor}
    */
-  responseType?: ObjectTypeConstructor<T>;
-
-  /**
-   * 表示此请求期望在多少秒没有收到响应时算作失败，默认值见{@link DEFAULT_CONNECTION_TIMEOUT_MS}
-   */
-  timeoutMs?: number;
-}
-
-/**
- * 包装GET请求的请求参数的对象接口
- */
-export interface GetParameters<T extends ObjectType> extends BaseParameters<T> {
-  /**
-   * 指数退避重试配置，见{@link RetryBackoffConfig}
-   *
-   * 默认值见{@link DEFAULT_RETRY_BACKOFF_CONFIG}
-   */
-  retryConfig?: RetryBackoffConfig;
+  responseType: ApiResponseBodyTypeConstructor<R>;
 }
 
 /**
  * 包装DELETE请求的请求参数的对象接口
  */
-export interface DeleteParameters<T extends ObjectType> extends BaseParameters<T> {}
+export interface DeleteParameters extends BaseParameters {}
 
 /**
  * 包装POST请求的请求参数的对象接口
  */
-export interface PostParameters<T extends ObjectType> extends BaseParameters<T> {
+export interface PostParameters extends BaseParameters {
   /**
    * 请求体的内容，必须为对象类型，但可以为空，表示对应的请求的请求体为空
    */
-  payload?: ObjectType;
+  payload?: ApiRequestBody;
 }
 
 /**
  * 包装PUT请求的请求参数的对象接口
  */
-export interface PutParameters<T extends ObjectType> extends PostParameters<T> {}
+export interface PutParameters extends PostParameters {}
 
 /**
  * 默认的请求超时时间，单位为毫秒
  */
-export const DEFAULT_CONNECTION_TIMEOUT_MS = 8000;
+export const DEFAULT_CONNECTION_TIMEOUT_MS = 6000;
 
 /**
  * 默认的指数退避重试参数
@@ -139,56 +126,67 @@ export class DataApiAccessService {
    */
   constructor(private readonly httpClient: HttpClient) {}
 
-  private handleApiAccess<T extends ObjectType>(
-    request: Observable<T>,
-    timeoutMs: number,
-    responseType?: ObjectTypeConstructor<T>
-  ) {
+  private wrapWithStateStream(request: Observable<any>): Observable<AsyncRequestState<any>> {
     return request.pipe(
-      timeout(timeoutMs),
-      map((response) => (!responseType ? response : this.jsonConvert.deserializeObject(response, responseType)))
+      map((responseObject) => new AsyncRequestState({ loading: false, responseObject })),
+      catchError((error) => of(new AsyncRequestState({ loading: false, error }))),
+      startWith(new AsyncRequestState({ loading: true }))
     );
   }
 
   /**
    * 执行 HTTP GET 请求
    *
-   * @template T
-   * @param {GetParameters<T>} parameters 请求参数
-   * @returns {Observable<T>} 其中`T`为服务端响应内容的类型，若输入的请求参数中没有指定`responseType`，则`T`为`unknown`，即忽略响应内容
+   * @template R
+   * @param {GetParameters<R>} parameters 请求参数，其中`responseType`必须给定
+   * @returns {Observable<R>} 其中`R`为服务端响应内容的类型，若输入的请求参数中没有指定`responseType`，则`R`为`unknown`，即忽略响应内容
    */
-  get<T extends ObjectType>(parameters: GetParameters<T>): Observable<T> {
+  get<R extends ApiResponseBody>(parameters: GetParameters<R>): Observable<R> {
     const aggregated = {
       params: new HttpParams(),
       timeoutMs: DEFAULT_CONNECTION_TIMEOUT_MS,
       retryConfig: DEFAULT_RETRY_BACKOFF_CONFIG,
       ...parameters
     };
-    return this.handleApiAccess(
-      this.httpClient.get<T>(toAbsoluteApiPath(aggregated.path), { params: aggregated.params }),
-      aggregated.timeoutMs
-    ).pipe(retryBackoff(aggregated.retryConfig));
+    return this.httpClient
+      .get<ApiResponse>(toAbsoluteApiPath(aggregated.path), { params: aggregated.params })
+      .pipe(
+        timeout(aggregated.timeoutMs),
+        retryBackoff(aggregated.retryConfig),
+        map((response) => this.jsonConvert.deserializeObject(response, ApiResponse)),
+        map((responseObject) => this.jsonConvert.deserializeObject(responseObject.data, aggregated.responseType))
+      );
+  }
+
+  getWithStateStream<R extends ApiResponseBody>(parameters: GetParameters<R>): Observable<AsyncRequestState<R>> {
+    return this.wrapWithStateStream(this.get(parameters));
   }
 
   /**
    * 执行 HTTP POST 请求
    *
-   * @template T
-   * @param {PostParameters<T>} parameters 请求参数
-   * @returns {Observable<T>} 其中`T`为服务端响应内容的类型，若输入的请求参数中没有指定`responseType`，则`T`为`unknown`，即忽略响应内容
+   * @template R
+   * @param {PostParameters<R>} parameters 请求参数
+   * @returns {Observable<R>} 其中`T`为服务端响应内容的类型，若输入的请求参数中没有指定`responseType`，则`T`为`unknown`，即忽略响应内容
    */
-  post<T extends ObjectType>(parameters: PostParameters<T>): Observable<T> {
+  post(parameters: PostParameters): Observable<ApiResponse> {
     const aggregated = {
       params: new HttpParams(),
       timeoutMs: DEFAULT_CONNECTION_TIMEOUT_MS,
       retryConfig: DEFAULT_RETRY_BACKOFF_CONFIG,
       ...parameters
     };
-    return this.handleApiAccess(
-      this.httpClient.post<T>(toAbsoluteApiPath(aggregated.path), aggregated.payload, {
+    return this.httpClient
+      .post<ApiResponse>(toAbsoluteApiPath(aggregated.path), aggregated.payload, {
         params: aggregated.params
-      }),
-      aggregated.timeoutMs
-    );
+      })
+      .pipe(
+        timeout(aggregated.timeoutMs),
+        map((response) => this.jsonConvert.deserializeObject(response, ApiResponse))
+      );
+  }
+
+  postWithStateStream(parameters: PostParameters): Observable<AsyncRequestState<ApiResponse>> {
+    return this.wrapWithStateStream(this.post(parameters));
   }
 }
