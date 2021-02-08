@@ -3,13 +3,13 @@ import { JsonProperty } from 'json2typescript';
 export class ApiResponse {
   // TODO: change to enum type
   @JsonProperty('status', String)
-  status!: string;
+  readonly status!: string;
 
   @JsonProperty('msg', String)
-  message!: string;
+  readonly message!: string;
 
   @JsonProperty('data')
-  data!: any;
+  readonly data!: any;
 
   // ignore 'paramData', do not use it!
 }

@@ -16,6 +16,7 @@ import {
  * @param {InjectionToken} token
  * @param {T} typeConstructor
  * @param {string} path
+ * @returns {FactoryProvider} 对应的Provider
  */
 export function provideConstantApiEntity<T extends ApiResponseBodyTypeConstructor<any>>(
   token: InjectionToken<any>,
