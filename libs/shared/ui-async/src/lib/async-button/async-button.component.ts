@@ -17,7 +17,7 @@ export class AsyncButtonComponent {
   text!: string;
 
   @Input()
-  requestState$!: Observable<AsyncRequestState>;
+  requestState$!: Observable<AsyncRequestState<any>>;
 
   @Input()
   buttonClasses!: string;

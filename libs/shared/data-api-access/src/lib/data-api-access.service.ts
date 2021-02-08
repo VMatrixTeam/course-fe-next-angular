@@ -2,11 +2,12 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { retryBackoff, RetryBackoffConfig } from 'backoff-rxjs';
 import { JsonConvert } from 'json2typescript';
-import { Observable, of } from 'rxjs';
+import { Observable, of, throwError } from 'rxjs';
 import { catchError, map, share, startWith, timeout } from 'rxjs/operators';
 import { ApiResponse } from './api/api-response';
 import { ApiRequestBody, ApiResponseBody, ApiResponseBodyTypeConstructor } from './api/api-type';
 import { AsyncRequestState } from './async-request-state';
+import { EncapsulatedApiError } from './api/api-error';
 
 /**
  * 包装请求参数的对象的基础接口
@@ -116,6 +117,17 @@ export class DataApiAccessService {
     );
   }
 
+  private resolveApiError(error: any) {
+    if (error instanceof Error) {
+      if ('error' in Error) {
+        const apiErrorResponse = this.jsonConvert.deserializeObject((error as any).error, ApiResponse);
+        return new EncapsulatedApiError(apiErrorResponse);
+      }
+      return error;
+    }
+    return new Error(error);
+  }
+
   /**
    * 执行 HTTP GET 请求
    *
@@ -140,7 +152,8 @@ export class DataApiAccessService {
         timeout(aggregated.timeoutMs),
         retryBackoff(aggregated.retryConfig),
         map((response) => this.jsonConvert.deserializeObject(response, ApiResponse)),
-        map((responseObject) => this.jsonConvert.deserializeObject(responseObject.data, responseType))
+        map((responseObject) => this.jsonConvert.deserializeObject(responseObject.data, responseType)),
+        catchError((err) => throwError(this.resolveApiError(err)))
       );
   }
 
@@ -171,7 +184,8 @@ export class DataApiAccessService {
       })
       .pipe(
         timeout(aggregated.timeoutMs),
-        map((response) => this.jsonConvert.deserializeObject(response, ApiResponse))
+        map((response) => this.jsonConvert.deserializeObject(response, ApiResponse)),
+        catchError((err) => throwError(this.resolveApiError(err)))
       );
   }
 

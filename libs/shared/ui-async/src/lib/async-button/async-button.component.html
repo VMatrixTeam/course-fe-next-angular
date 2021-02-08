@@ -1,6 +1,6 @@
 <ng-container *rxLet="requestState$; let status">
   <button
-    *ngIf="status.active"
+    *ngIf="status.loading"
     pButton
     pRipple
     [ngClass]="buttonClasses"
