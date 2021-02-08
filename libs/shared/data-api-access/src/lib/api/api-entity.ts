@@ -1,5 +1,5 @@
 import { HttpParams } from '@angular/common/http';
-import { ActivatedRouteSnapshot, ParamMap } from '@angular/router';
+import { NavigationEnd, Router } from '@angular/router';
 import { AsyncRequestState, DataApiAccessService } from '@course-fe-next/shared/data-api-access';
 import { RxState } from '@rx-angular/state';
 import { combineLatest, Observable, Subject, Subscription } from 'rxjs';
@@ -37,36 +37,36 @@ class AsyncRequestStream<P, R extends ApiResponseBody> {
  *
  * @template T
  */
-export class ApiEntityConfiguration<T extends ApiResponseBodyTypeConstructor<any>, E> {
+export interface ApiEntityConfiguration<T extends ApiResponseBodyTypeConstructor<any>, E> {
   /**
    * 表示此实体对应的数据类型的构造器，参见{@link ApiResponseBodyTypeConstructor}
    *
    * @see ApiResponseBodyTypeConstructor
    */
-  readonly typeConstructor!: T;
+  readonly typeConstructor: T;
 
   /**
    * 表示此实体对应的REST Api Endpoint
    */
-  readonly endpoints!: E;
+  readonly endpointsProvider: E;
 }
 
-export class StaticEntityEndpoints {
+export class ConstantEndpointsProvider {
   constructor(readonly getPath: string, readonly postPath: string) {}
 
   /**
    * 向GET、POST、DELETE、PUT方法应用同一个路径，以构造这样的`StaticEntityEndpoints`对象
    *
    * @param {string} path 路径
-   * @returns {StaticEntityEndpoints} GET、POST、DELETE、PUT方法都对应同一个路径的实例
+   * @returns {ConstantEndpointsProvider} GET、POST、DELETE、PUT方法都对应同一个路径的实例
    */
   static forAll(path: string) {
-    return new StaticEntityEndpoints(path, path);
+    return new ConstantEndpointsProvider(path, path);
   }
 }
 
 /**
- * 实体资源的封装，这里的'Static'表示，它对应的Api路径在整个生命周期中是不变的，例如`/api/courses`。
+ * 实体资源的封装，名字中的'Constant'表示，它对应的Api路径在整个生命周期中是不变的，例如`/api/courses`。
  * 它同时包含与更新实体数据有关的逻辑，以及一些用于表示操作状态的`Observable`
  *
  * 注意，它是{@link RxState}的子类，这意味着它在封装实体数据的同时，向外界提供了强大的操作能力
@@ -91,11 +91,11 @@ export class StaticEntityEndpoints {
  *
  * @template T
  */
-export class StaticApiEntity<T extends ApiResponseBody> extends RxState<T> {
+export class ConstantApiEntity<T extends ApiResponseBody> extends RxState<T> {
   private readonly getStream = new AsyncRequestStream<HttpParams | undefined, T>((params) =>
     this.dataApiAccessService.getAsSharedStateStream(
       {
-        path: this.configuration.endpoints.getPath,
+        path: this.configuration.endpointsProvider.getPath,
         params
       },
       this.configuration.typeConstructor
@@ -119,7 +119,7 @@ export class StaticApiEntity<T extends ApiResponseBody> extends RxState<T> {
    */
   constructor(
     private readonly dataApiAccessService: DataApiAccessService,
-    private readonly configuration: ApiEntityConfiguration<ApiResponseBodyTypeConstructor<T>, StaticEntityEndpoints>
+    private readonly configuration: ApiEntityConfiguration<ApiResponseBodyTypeConstructor<T>, ConstantEndpointsProvider>
   ) {
     super();
     this.connect(this.getStream.response$);
@@ -144,12 +144,24 @@ export class StaticApiEntity<T extends ApiResponseBody> extends RxState<T> {
   }
 }
 
-export class RouteBasedEntityEndpoints {
-  constructor(readonly provideEndpoints: (params: ParamMap) => StaticEntityEndpoints) {}
+export class RouteBasedEndpointsProvider {
+  readonly pathRegex: RegExp;
+
+  constructor(
+    pathRegex: RegExp | string,
+    private readonly endpointsProvider: (params: string[]) => ConstantEndpointsProvider | string
+  ) {
+    this.pathRegex = typeof pathRegex === 'string' ? new RegExp(pathRegex).compile() : pathRegex;
+  }
+
+  provideEndpoints(params: string[]) {
+    const result = this.endpointsProvider(params);
+    return typeof result === 'string' ? ConstantEndpointsProvider.forAll(result) : result;
+  }
 }
 
 export class RouteBasedApiEntity<T extends ApiResponseBody> extends RxState<T> {
-  private readonly latestEndpoints$: Observable<StaticEntityEndpoints>;
+  private readonly latestEndpoints$: Observable<ConstantEndpointsProvider>;
 
   private readonly doGetOnRouteUpdateSubscription: Subscription;
 
@@ -180,20 +192,23 @@ export class RouteBasedApiEntity<T extends ApiResponseBody> extends RxState<T> {
 
   constructor(
     private readonly dataApiAccessService: DataApiAccessService,
+    router: Router,
     private readonly configuration: ApiEntityConfiguration<
       ApiResponseBodyTypeConstructor<T>,
-      RouteBasedEntityEndpoints
-    >,
-    private readonly targetRouteUpdate$: Observable<ActivatedRouteSnapshot>
+      RouteBasedEndpointsProvider
+    >
   ) {
     super();
-    this.latestEndpoints$ = this.targetRouteUpdate$.pipe(
+    this.latestEndpoints$ = router.events.pipe(
+      filter((event) => event instanceof NavigationEnd),
+      map(() => configuration.endpointsProvider.pathRegex.exec(router.url)),
+      filter((result) => !!result),
       distinctUntilChanged(),
-      map((snapshot) => snapshot.paramMap),
-      map((paramMap) => this.configuration.endpoints.provideEndpoints(paramMap)),
+      map((result) => configuration.endpointsProvider.provideEndpoints((result as RegExpExecArray).slice(1))),
       shareReplay(1)
     );
     this.doGetOnRouteUpdateSubscription = this.latestEndpoints$.subscribe(() => this.doGet());
+    this.connect(this.getStream.response$);
   }
 
   /**

@@ -1,3 +1,3 @@
-# shared-data-course-api
+# shared-course-data-course-api
 
 This library was generated with [Nx](https://nx.dev).

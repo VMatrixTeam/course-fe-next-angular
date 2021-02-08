@@ -32,16 +32,16 @@
     "tools-stub": {
       "tags": ["type:forbidden"]
     },
-    "shared-data-course-api": {
-      "tags": ["load:eager", "scope:shared", "type:data-access"]
-    },
-    "shared-util-rx": {
-      "tags": ["load:eager", "scope:shared", "type:util"]
-    },
     "shared-ui-async": {
       "tags": ["load:eager", "scope:shared", "type:ui"]
     },
     "shared-util-pipe": {
+      "tags": ["load:eager", "scope:shared", "type:util"]
+    },
+    "shared-course-data-course-api": {
+      "tags": ["load:eager", "scope:shared", "type:data-access"]
+    },
+    "shared-util-etc": {
       "tags": ["load:eager", "scope:shared", "type:util"]
     }
   }

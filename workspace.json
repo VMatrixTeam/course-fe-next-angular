@@ -151,34 +151,6 @@
         }
       }
     },
-    "shared-data-course-api": {
-      "projectType": "library",
-      "root": "libs/shared/data-course-api",
-      "sourceRoot": "libs/shared/data-course-api/src",
-      "prefix": "app",
-      "architect": {
-        "lint": {
-          "builder": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["libs/shared/data-course-api/src/**/*.ts", "libs/shared/data-course-api/src/**/*.html"]
-          }
-        }
-      }
-    },
-    "shared-util-rx": {
-      "projectType": "library",
-      "root": "libs/shared/util-rx",
-      "sourceRoot": "libs/shared/util-rx/src",
-      "prefix": "app",
-      "architect": {
-        "lint": {
-          "builder": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["libs/shared/util-rx/src/**/*.ts", "libs/shared/util-rx/src/**/*.html"]
-          }
-        }
-      }
-    },
     "shared-ui-async": {
       "projectType": "library",
       "root": "libs/shared/ui-async",
@@ -203,6 +175,37 @@
           "builder": "@nrwl/linter:eslint",
           "options": {
             "lintFilePatterns": ["libs/shared/util-pipe/src/**/*.ts", "libs/shared/util-pipe/src/**/*.html"]
+          }
+        }
+      }
+    },
+    "shared-course-data-course-api": {
+      "projectType": "library",
+      "root": "libs/shared/course/data-course-api",
+      "sourceRoot": "libs/shared/course/data-course-api/src",
+      "prefix": "app",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/shared/course/data-course-api/src/**/*.ts",
+              "libs/shared/course/data-course-api/src/**/*.html"
+            ]
+          }
+        }
+      }
+    },
+    "shared-util-etc": {
+      "projectType": "library",
+      "root": "libs/shared/util-etc",
+      "sourceRoot": "libs/shared/util-etc/src",
+      "prefix": "app",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/shared/util-etc/src/**/*.ts", "libs/shared/util-etc/src/**/*.html"]
           }
         }
       }

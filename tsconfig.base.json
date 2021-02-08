@@ -17,10 +17,10 @@
     "paths": {
       "@course-fe-next/shared/data-api-access": ["libs/shared/data-api-access/src/index.ts"],
       "@course-fe-next/tools-stub": ["libs/tools-stub/src/index.ts"],
-      "@course-fe-next/shared/data-course-api": ["libs/shared/data-course-api/src/index.ts"],
-      "@course-fe-next/shared/util-rx": ["libs/shared/util-rx/src/index.ts"],
       "@course-fe-next/shared/ui-async": ["libs/shared/ui-async/src/index.ts"],
-      "@course-fe-next/shared/util-pipe": ["libs/shared/util-pipe/src/index.ts"]
+      "@course-fe-next/shared/util-pipe": ["libs/shared/util-pipe/src/index.ts"],
+      "@course-fe-next/shared/course/data-course-api": ["libs/shared/course/data-course-api/src/index.ts"],
+      "@course-fe-next/shared/util-etc": ["libs/shared/util-etc/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp", "dist"]
