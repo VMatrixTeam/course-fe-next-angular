@@ -1,7 +1,8 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
 // FIXME: typescript-eslint bug here
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { AsyncRequestState } from '@course-fe-next/shared/data-api-access';
+import { delayLoadingState } from '@course-fe-next/shared/util-etc';
 import { UntilDestroy } from '@ngneat/until-destroy';
 import { Observable } from 'rxjs';
 
@@ -12,13 +13,22 @@ import { Observable } from 'rxjs';
   templateUrl: './async-button.component.html',
   styleUrls: ['./async-button.component.css']
 })
-export class AsyncButtonComponent {
+export class AsyncButtonComponent implements OnInit {
   @Input()
   text!: string;
 
   @Input()
-  requestState$!: Observable<AsyncRequestState<any>>;
+  requestState!: Observable<AsyncRequestState<any>>;
 
   @Input()
   buttonClasses!: string;
+
+  @Input()
+  noLoadingStateDelay = false;
+
+  requestState$!: Observable<AsyncRequestState<any>>;
+
+  ngOnInit() {
+    this.requestState$ = this.requestState.pipe(delayLoadingState());
+  }
 }
