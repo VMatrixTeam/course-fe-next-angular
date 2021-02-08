@@ -4,10 +4,10 @@ import { retryBackoff, RetryBackoffConfig } from 'backoff-rxjs';
 import { JsonConvert } from 'json2typescript';
 import { Observable, of, throwError } from 'rxjs';
 import { catchError, map, share, startWith, timeout } from 'rxjs/operators';
+import { EncapsulatedApiError } from './api/api-error';
 import { ApiResponse } from './api/api-response';
 import { ApiRequestBody, ApiResponseBody, ApiResponseBodyTypeConstructor } from './api/api-type';
 import { AsyncRequestState } from './async-request-state';
-import { EncapsulatedApiError } from './api/api-error';
 
 /**
  * 包装请求参数的对象的基础接口

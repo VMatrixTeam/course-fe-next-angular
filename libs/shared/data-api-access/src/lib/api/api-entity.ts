@@ -84,8 +84,8 @@ export class ConstantEndpointsProvider {
  *     return `${this.nickname} (${this.name})`;
  *   }
  * }
- * // 通过DI注入ApiEntity<User>
- * private userEntity!: ApiEntity<User>;
+ * // 通过DI注入ConstantApiEntity<User>
+ * private userEntity!: ConstantApiEntity<User>;
  * // 尽情地使用，注意ApiEntity<T>是RxState<T>的子类
  * readonly name$ = this.state.connect(this.userEntity.select('name'));
  *

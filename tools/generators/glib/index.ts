@@ -2,6 +2,7 @@ import { Tree, names, formatFiles, installPackagesTask, updateJson, getWorkspace
 import { libraryGenerator } from '@nrwl/angular/src/schematics/library/library';
 import { dasherize } from '@nrwl/workspace/src/utils/strings';
 import { join } from 'path';
+import { updateImports } from '@nrwl/workspace/src/schematics/move/lib/update-imports';
 
 const TYPE_PREFIX_MAP = {
   'data-access': 'data-',
@@ -44,6 +45,17 @@ export default async function (tree: Tree, schema: any) {
   const name = names(schema.name).fileName;
   const projectDirectory = schema.directory ? `${names(schema.directory).fileName}/${name}` : name;
   const projectRoot = `${getWorkspaceLayout(tree).libsDir}/${projectDirectory}`;
+
+  // fix a linting error
+  const moduleFile = join(projectRoot, 'src', 'lib', `${name}.module.ts`);
+  const content = tree.read(moduleFile).toString();
+  tree.write(
+    moduleFile,
+    content.replace(
+      `import { NgModule } from '@angular/core';\nimport { CommonModule } from '@angular/common';`,
+      `import { CommonModule } from '@angular/common';\nimport { NgModule } from '@angular/core';`
+    )
+  );
 
   await updateJson(tree, join(projectRoot, '.eslintrc.json'), (json) => {
     // remove unnecessary extend rules because they're already specified in root .eslintrc.json

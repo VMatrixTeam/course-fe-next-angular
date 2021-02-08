@@ -9,8 +9,8 @@
     "prod:affected:build": "NODE_ENV=production nx affected:build --prod",
     "compodoc": "nx run tools-stub:compodoc",
     "compodoc:watch-serve": "nx run tools-stub:compodoc --watch --serve",
-    "all:lint": "nx workspace-lint && nx run-many --target=lint --all --parallel --maxParallel=8",
-    "affected:lint": "nx workspace-lint && nx affected:lint --parallel --maxParallel=8",
+    "all:lint": "nx run-many --target=lint --all --parallel --maxParallel=8",
+    "affected:lint": "nx affected:lint --parallel --maxParallel=8",
     "affected:lint-and-fix": "nx affected:lint --parallel --maxParallel=8 --fix",
     "start": "nx serve --hmr --ssl",
     "test": "nx test",
@@ -32,6 +32,11 @@
     "postinstall": "ngcc --properties es2015 browser module main --first-only --create-ivy-entry-points"
   },
   "private": true,
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run affected:lint-and-fix"
+    }
+  },
   "dependencies": {
     "@angular-builders/custom-webpack": "11.0.0",
     "@angular/animations": "^11.0.0",
@@ -84,6 +89,7 @@
     "eslint-plugin-jsdoc": "^31.3.3",
     "eslint-plugin-prefer-arrow": "^1.2.3",
     "eslint-plugin-prettier": "^3.3.1",
+    "husky": "^4.3.8",
     "jest": "26.2.2",
     "jest-preset-angular": "8.3.1",
     "prettier": "2.2.1",
