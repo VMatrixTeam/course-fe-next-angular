@@ -6,7 +6,7 @@ import { updateImports } from '@nrwl/workspace/src/schematics/move/lib/update-im
 
 const TYPE_PREFIX_MAP = {
   'data-access': 'data-',
-  feature: 'feature-',
+  feature: 'feat-',
   ui: 'ui-',
   util: 'util-'
 };
@@ -17,23 +17,13 @@ export default async function (tree: Tree, schema: any) {
     throw new Error(`类型为 '${schema.type}' 的库的名称必须以 '${prefixToCheck}' 开头`);
   }
 
-  let scope;
-  if (schema.scope) {
-    scope = schema.scope;
-  } else {
-    scope = dasherize(schema.name);
-    if (schema.directory) {
-      scope = `${dasherize(schema.directory)}-${scope}`;
-    }
-  }
-
   console.log('');
   console.log('走你 ┏ (゜ω゜)=☞');
 
   await libraryGenerator(tree, {
     name: schema.name,
     directory: schema.directory,
-    tags: `load:${schema.load},scope:${scope},type:${schema.type}${schema.tags ? `,${schema.tags}` : ''}`,
+    tags: `load:${schema.load},scope:${schema.scope},type:${schema.type}${schema.tags ? `,${schema.tags}` : ''}`,
     simpleModuleName: true,
     style: 'css',
     strict: true,

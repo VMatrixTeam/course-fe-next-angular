@@ -92,24 +92,10 @@
             }
           }
         },
-        "extract-i18n": {
-          "builder": "@angular-devkit/build-angular:extract-i18n",
-          "options": {
-            "browserTarget": "student-app:build"
-          }
-        },
         "lint": {
           "builder": "@nrwl/linter:eslint",
           "options": {
             "lintFilePatterns": ["apps/student-app/src/**/*.ts", "apps/student-app/src/**/*.html"]
-          }
-        },
-        "test": {
-          "builder": "@nrwl/jest:jest",
-          "outputs": ["coverage/apps/student-app"],
-          "options": {
-            "jestConfig": "apps/student-app/jest.config.js",
-            "passWithNoTests": true
           }
         }
       }
@@ -206,6 +192,115 @@
           "builder": "@nrwl/linter:eslint",
           "options": {
             "lintFilePatterns": ["libs/shared/util-etc/src/**/*.ts", "libs/shared/util-etc/src/**/*.html"]
+          }
+        }
+      }
+    },
+    "login-app": {
+      "projectType": "application",
+      "root": "apps/login-app",
+      "sourceRoot": "apps/login-app/src",
+      "prefix": "app",
+      "architect": {
+        "build": {
+          "builder": "@angular-builders/custom-webpack:browser",
+          "options": {
+            "outputPath": "dist/apps/login-app",
+            "index": "apps/login-app/src/index.html",
+            "main": "apps/login-app/src/main.ts",
+            "polyfills": "apps/login-app/src/polyfills.ts",
+            "tsConfig": "apps/login-app/tsconfig.app.json",
+            "aot": true,
+            "assets": ["apps/login-app/src/favicon.ico", "apps/login-app/src/assets"],
+            "styles": [
+              "apps/student-app/src/styles.css",
+              {
+                "input": "node_modules/tailwindcss/base.css",
+                "bundleName": "tailwindcss"
+              },
+              {
+                "input": "node_modules/tailwindcss/components.css",
+                "bundleName": "tailwindcss"
+              },
+              {
+                "input": "node_modules/tailwindcss/utilities.css",
+                "bundleName": "tailwindcss"
+              },
+              {
+                "input": "node_modules/primeicons/primeicons.css",
+                "bundleName": "primeng"
+              },
+              {
+                "input": "node_modules/primeng/resources/primeng.min.css",
+                "bundleName": "primeng"
+              },
+              {
+                "input": "node_modules/primeng/resources/themes/saga-blue/theme.css",
+                "bundleName": "primeng"
+              }
+            ],
+            "scripts": []
+          },
+          "configurations": {
+            "production": {
+              "fileReplacements": [
+                {
+                  "replace": "apps/login-app/src/environments/environment.ts",
+                  "with": "apps/login-app/src/environments/environment.prod.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": true,
+              "namedChunks": false,
+              "extractLicenses": true,
+              "aot": true,
+              "vendorChunk": true,
+              "buildOptimizer": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "500kb",
+                  "maximumError": "1mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "2kb",
+                  "maximumError": "4kb"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@angular-builders/custom-webpack:browser",
+          "options": {
+            "browserTarget": "login-app:build"
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "login-app:build:production"
+            }
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["apps/login-app/src/**/*.ts", "apps/login-app/src/**/*.html"]
+          }
+        }
+      }
+    },
+    "login-feat-login": {
+      "projectType": "library",
+      "root": "libs/login/feat-login",
+      "sourceRoot": "libs/login/feat-login/src",
+      "prefix": "app",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/login/feat-login/src/**/*.ts", "libs/login/feat-login/src/**/*.html"]
           }
         }
       }

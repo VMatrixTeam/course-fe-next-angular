@@ -43,6 +43,12 @@
     },
     "shared-util-etc": {
       "tags": ["load:eager", "scope:shared", "type:util"]
+    },
+    "login-app": {
+      "tags": ["scope:login-app"]
+    },
+    "login-feat-login": {
+      "tags": ["load:eager", "scope:login", "type:feature"]
     }
   }
 }

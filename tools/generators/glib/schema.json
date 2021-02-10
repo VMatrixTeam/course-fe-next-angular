@@ -54,7 +54,7 @@
     "scope": {
       "type": "string",
       "description": "Scope of the library",
-      "x-prompt": "领域，可留空，默认为project名"
+      "x-prompt": "领域"
     },
     "tags": {
       "type": "string",
@@ -62,5 +62,5 @@
       "x-prompt": "tag，用英文逗号分隔，可留空"
     }
   },
-  "required": ["name", "type", "load"]
+  "required": ["name", "type", "load", "scope"]
 }
