@@ -51,6 +51,23 @@ export interface ApiEntityConfiguration<T extends ApiResponseBodyTypeConstructor
   readonly endpointsProvider: E;
 }
 
+export abstract class ApiEntity<T extends ApiResponseBody> extends RxState<T> {
+  /**
+   * 一个反映此实体当前进行的GET请求动作的状态的流，注意它具有重放机制，重放个数为1
+   *
+   * 对于一个刚刚初始化的异步动作流，它默认会释放一个`isIdle === true`的状态对象
+   *
+   * 参见{@link AsyncRequestState}
+   *
+   * @see AsyncRequestState
+   */
+  abstract get get$(): Observable<AsyncRequestState<T>>;
+
+  abstract doGet(params?: HttpParams): void;
+
+  abstract destroy(): void;
+}
+
 export class ConstantEndpointsProvider {
   constructor(readonly getPath: string, readonly postPath: string) {}
 
@@ -85,13 +102,13 @@ export class ConstantEndpointsProvider {
  *   }
  * }
  * // 通过DI注入ConstantApiEntity<User>
- * private userEntity!: ConstantApiEntity<User>;
+ * private userEntity!: ApiEntity<User>;
  * // 尽情地使用，注意ApiEntity<T>是RxState<T>的子类
  * readonly name$ = this.state.connect(this.userEntity.select('name'));
  *
  * @template T
  */
-export class ConstantApiEntity<T extends ApiResponseBody> extends RxState<T> {
+export class ConstantApiEntity<T extends ApiResponseBody> extends ApiEntity<T> {
   private readonly getStream = new AsyncRequestStream<HttpParams | undefined, T>((params) =>
     this.dataApiAccessService.getAsSharedStateStream(
       {
@@ -103,17 +120,6 @@ export class ConstantApiEntity<T extends ApiResponseBody> extends RxState<T> {
   );
 
   /**
-   * 一个反映此实体当前进行的GET请求动作的状态的流，注意它具有重放机制，重放个数为1
-   *
-   * 对于一个刚刚初始化的异步动作流，它默认会释放一个`isIdle === true`的状态对象
-   *
-   * 参见{@link AsyncRequestState}
-   *
-   * @see AsyncRequestState
-   */
-  readonly get$ = this.getStream.state$;
-
-  /**
    * @internal
    * @ignore
    */
@@ -123,6 +129,10 @@ export class ConstantApiEntity<T extends ApiResponseBody> extends RxState<T> {
   ) {
     super();
     this.connect(this.getStream.response$);
+  }
+
+  get get$() {
+    return this.getStream.state$;
   }
 
   /**
@@ -160,7 +170,7 @@ export class RouteBasedEndpointsProvider {
   }
 }
 
-export class RouteBasedApiEntity<T extends ApiResponseBody> extends RxState<T> {
+export class RouteBasedApiEntity<T extends ApiResponseBody> extends ApiEntity<T> {
   private readonly latestEndpoints$: Observable<ConstantEndpointsProvider>;
 
   private readonly doGetOnRouteUpdateSubscription: Subscription;
@@ -178,17 +188,6 @@ export class RouteBasedApiEntity<T extends ApiResponseBody> extends RxState<T> {
       )
     )
   );
-
-  /**
-   * 一个反映此实体当前进行的GET请求动作的状态的流，注意它具有重放机制，重放个数为1
-   *
-   * 对于一个刚刚初始化的异步动作流，它默认会释放一个`isIdle === true`的状态对象
-   *
-   * 参见{@link AsyncRequestState}
-   *
-   * @see AsyncRequestState
-   */
-  readonly get$ = this.getStream.state$;
 
   constructor(
     private readonly dataApiAccessService: DataApiAccessService,
@@ -209,6 +208,10 @@ export class RouteBasedApiEntity<T extends ApiResponseBody> extends RxState<T> {
     );
     this.doGetOnRouteUpdateSubscription = this.latestEndpoints$.subscribe(() => this.doGet());
     this.connect(this.getStream.response$);
+  }
+
+  get get$() {
+    return this.getStream.state$;
   }
 
   /**
