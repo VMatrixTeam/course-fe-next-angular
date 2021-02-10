@@ -29,6 +29,10 @@ export class AsyncButtonComponent implements OnInit {
   requestState$!: Observable<AsyncRequestState<any>>;
 
   ngOnInit() {
-    this.requestState$ = this.requestState.pipe(delayLoadingState());
+    if (this.noLoadingStateDelay) {
+      this.requestState$ = this.requestState;
+    } else {
+      this.requestState$ = this.requestState.pipe(delayLoadingState());
+    }
   }
 }

@@ -7,6 +7,7 @@ export type ApiRequestBody = any;
  * 表示对象类型，它的键值均为`string`类型，因此适合与JSON Object**相互**转换
  */
 export type ApiResponseBody = Record<string, any>;
+
 /**
  * 表示构造函数，其中`T`表示构造函数的返回值，必须符合{@link ApiResponseBody}
  *
