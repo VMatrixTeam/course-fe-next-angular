@@ -8,8 +8,8 @@ import { ApiResponse } from './api-response';
  * 例如，对于{@link DataApiAccessService}而言，它会将遇到的Api报错封装到抛出的`Error`对象中
  */
 export class EncapsulatedApiError extends Error {
-  constructor(readonly apiErrorResponse: ApiResponse) {
-    super();
+  constructor(readonly apiErrorResponse: ApiResponse, error?: Error) {
+    super(error?.message);
   }
 }
 

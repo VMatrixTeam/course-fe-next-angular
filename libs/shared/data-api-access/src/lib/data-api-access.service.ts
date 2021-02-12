@@ -2,8 +2,8 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { retryBackoff, RetryBackoffConfig } from 'backoff-rxjs';
 import { JsonConvert } from 'json2typescript';
-import { Observable, of, throwError } from 'rxjs';
-import { catchError, map, share, startWith, timeout } from 'rxjs/operators';
+import { Observable, of, ReplaySubject, throwError } from 'rxjs';
+import { catchError, map, share, startWith, tap, timeout } from 'rxjs/operators';
 import { EncapsulatedApiError } from './api/api-error';
 import { ApiResponse } from './api/api-response';
 import { ApiRequestBody, ApiResponseBody, ApiResponseBodyTypeConstructor } from './api/api-type';
@@ -98,9 +98,15 @@ export function toAbsoluteApiPath(path: string) {
   return `${API_ENDPOINT_PREFIX}/${path}`;
 }
 
+export type RequestResult = ApiResponse | EncapsulatedApiError | Error;
+
 @Injectable({ providedIn: 'root' })
 export class DataApiAccessService {
   private readonly jsonConvert = new JsonConvert();
+
+  private readonly latestRequestResult = new ReplaySubject<RequestResult>(1);
+
+  readonly latestRequestResult$ = this.latestRequestResult.asObservable();
 
   /**
    * @internal
@@ -121,7 +127,7 @@ export class DataApiAccessService {
     if (error instanceof Error) {
       if ('error' in Error) {
         const apiErrorResponse = this.jsonConvert.deserializeObject((error as any).error, ApiResponse);
-        return new EncapsulatedApiError(apiErrorResponse);
+        return new EncapsulatedApiError(apiErrorResponse, error);
       }
       return error;
     }
@@ -152,8 +158,12 @@ export class DataApiAccessService {
         timeout(aggregated.timeoutMs),
         retryBackoff(aggregated.retryConfig),
         map((response) => this.jsonConvert.deserializeObject(response, ApiResponse)),
-        map((responseObject) => this.jsonConvert.deserializeObject(responseObject.data, responseType)),
-        catchError((err) => throwError(this.resolveApiError(err)))
+        tap((response) => this.latestRequestResult.next(response)),
+        map((response) => this.jsonConvert.deserializeObject(response.data, responseType)),
+        catchError((err) => throwError(this.resolveApiError(err))),
+        tap({
+          error: (err) => this.latestRequestResult.next(err)
+        })
       );
   }
 
@@ -185,7 +195,11 @@ export class DataApiAccessService {
       .pipe(
         timeout(aggregated.timeoutMs),
         map((response) => this.jsonConvert.deserializeObject(response, ApiResponse)),
-        catchError((err) => throwError(this.resolveApiError(err)))
+        tap((response) => this.latestRequestResult.next(response)),
+        catchError((err) => throwError(this.resolveApiError(err))),
+        tap({
+          error: (err) => this.latestRequestResult.next(err)
+        })
       );
   }
 
