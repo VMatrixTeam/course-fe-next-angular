@@ -48,7 +48,10 @@
       "tags": ["scope:login-app"]
     },
     "login-feat-login": {
-      "tags": ["load:eager", "scope:login", "type:feature"]
+      "tags": ["load:eager", "scope:login-app", "type:feature"]
+    },
+    "shared-data-user": {
+      "tags": ["load:eager", "scope:shared", "type:data-access"]
     }
   }
 }

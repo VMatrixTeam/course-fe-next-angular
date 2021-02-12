@@ -6,6 +6,8 @@ import { combineLatest, Observable, Subject, Subscription } from 'rxjs';
 import { distinctUntilChanged, filter, map, shareReplay, switchMap } from 'rxjs/operators';
 import { ApiResponseBody, ApiResponseBodyTypeConstructor } from './api-type';
 
+export type ReadonlyRxState<T extends Record<string, any>> = Pick<RxState<T>, 'select'>;
+
 class AsyncRequestStream<P, R extends ApiResponseBody> {
   private readonly invoker = new Subject<P>();
 
@@ -51,7 +53,13 @@ export interface ApiEntityConfiguration<T extends ApiResponseBodyTypeConstructor
   readonly endpointsProvider: E;
 }
 
-export abstract class ApiEntity<T extends ApiResponseBody> extends RxState<T> {
+export abstract class ApiEntity<T extends ApiResponseBody> {
+  protected readonly state = new RxState<T>();
+
+  get data$(): ReadonlyRxState<T> {
+    return this.state;
+  }
+
   /**
    * 一个反映此实体当前进行的GET请求动作的状态的流，注意它具有重放机制，重放个数为1
    *
@@ -63,8 +71,18 @@ export abstract class ApiEntity<T extends ApiResponseBody> extends RxState<T> {
    */
   abstract get get$(): Observable<AsyncRequestState<T>>;
 
+  /**
+   * 向这个实体对应的REST Api Endpoint发出GET请求
+   *
+   * 注意，这是一个同步方法，既不返回`Observable`，也不返回`Promise`，请求是否完成或者是否发生错误会被同步到{@link get$}
+   *
+   * @param {HttpParams} params 请求参数
+   */
   abstract doGet(params?: HttpParams): void;
 
+  /**
+   * 销毁此对象，这会释放所有的异步动作流，包括对他们持有的{@link Subject}进行`complete()`操作
+   */
   abstract destroy(): void;
 }
 
@@ -104,7 +122,7 @@ export class ConstantEndpointsProvider {
  * // 通过DI注入ConstantApiEntity<User>
  * private userEntity!: ApiEntity<User>;
  * // 尽情地使用，注意ApiEntity<T>是RxState<T>的子类
- * readonly name$ = this.state.connect(this.userEntity.select('name'));
+ * readonly name$ = this.state.connect(this.userEntity.data$.select('name'));
  *
  * @template T
  */
@@ -128,27 +146,17 @@ export class ConstantApiEntity<T extends ApiResponseBody> extends ApiEntity<T> {
     private readonly configuration: ApiEntityConfiguration<ApiResponseBodyTypeConstructor<T>, ConstantEndpointsProvider>
   ) {
     super();
-    this.connect(this.getStream.response$);
+    this.state.connect(this.getStream.response$);
   }
 
   get get$() {
     return this.getStream.state$;
   }
 
-  /**
-   * 向这个实体对应的REST Api Endpoint发出GET请求
-   *
-   * 注意，这是一个同步方法，既不返回`Observable`，也不返回`Promise`，请求是否完成或者是否发生错误会被同步到{@link get$}
-   *
-   * @param {HttpParams} params 请求参数
-   */
   doGet(params?: HttpParams) {
     this.getStream.invoke(params);
   }
 
-  /**
-   * 销毁此对象，这会释放所有的异步动作流，包括对他们持有的{@link Subject}进行`complete()`操作
-   */
   destroy() {
     this.getStream.destroy();
   }
@@ -207,27 +215,17 @@ export class RouteBasedApiEntity<T extends ApiResponseBody> extends ApiEntity<T>
       shareReplay(1)
     );
     this.doGetOnRouteUpdateSubscription = this.latestEndpoints$.subscribe(() => this.doGet());
-    this.connect(this.getStream.response$);
+    this.state.connect(this.getStream.response$);
   }
 
   get get$() {
     return this.getStream.state$;
   }
 
-  /**
-   * 向这个实体对应的REST Api Endpoint发出GET请求
-   *
-   * 注意，这是一个同步方法，既不返回`Observable`，也不返回`Promise`，请求是否完成或者是否发生错误会被同步到{@link get$}
-   *
-   * @param {HttpParams} params 请求参数
-   */
   doGet(params?: HttpParams) {
     this.getStream.invoke(params);
   }
 
-  /**
-   * 销毁此对象，这会释放所有的异步动作流，包括对他们持有的{@link Subject}进行`complete()`操作
-   */
   destroy() {
     this.doGetOnRouteUpdateSubscription.unsubscribe();
     this.getStream.destroy();

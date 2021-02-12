@@ -304,6 +304,20 @@
           }
         }
       }
+    },
+    "shared-data-user": {
+      "projectType": "library",
+      "root": "libs/shared/data-user",
+      "sourceRoot": "libs/shared/data-user/src",
+      "prefix": "app",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/shared/data-user/src/**/*.ts", "libs/shared/data-user/src/**/*.html"]
+          }
+        }
+      }
     }
   },
   "cli": {

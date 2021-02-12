@@ -75,6 +75,7 @@
           }
         ],
         "import/no-relative-parent-imports": "error",
+        "import/named": "off",
         "prefer-arrow/prefer-arrow-functions": [
           "error",
           {
@@ -101,6 +102,10 @@
               {
                 "sourceTag": "scope:student-app",
                 "onlyDependOnLibsWithTags": ["scope:student-app", "scope:shared"]
+              },
+              {
+                "sourceTag": "scope:login-app",
+                "onlyDependOnLibsWithTags": ["scope:login-app", "scope:shared"]
               },
               {
                 "sourceTag": "scope:shared",

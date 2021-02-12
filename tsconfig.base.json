@@ -21,7 +21,8 @@
       "@course-fe-next/shared/util-pipe": ["libs/shared/util-pipe/src/index.ts"],
       "@course-fe-next/shared/course/data-course-api": ["libs/shared/course/data-course-api/src/index.ts"],
       "@course-fe-next/shared/util-etc": ["libs/shared/util-etc/src/index.ts"],
-      "@course-fe-next/login/feat-login": ["libs/login/feat-login/src/index.ts"]
+      "@course-fe-next/login/feat-login": ["libs/login/feat-login/src/index.ts"],
+      "@course-fe-next/shared/data-user": ["libs/shared/data-user/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp", "dist"]
