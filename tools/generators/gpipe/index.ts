@@ -45,7 +45,7 @@ function applyNewTemplate(schema: any) {
         classify: strings.classify,
         camelize: strings.camelize
       }),
-      move(`${schema.path}/${schema.name}`)
+      move(schema.path)
     ]),
     MergeStrategy.Overwrite
   );

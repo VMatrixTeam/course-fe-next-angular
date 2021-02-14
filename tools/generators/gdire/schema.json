@@ -4,7 +4,7 @@
   "properties": {
     "name": {
       "type": "string",
-      "description": "Component name",
+      "description": "Directive name",
       "$default": {
         "$source": "argv",
         "index": 0
@@ -14,21 +14,21 @@
     },
     "project": {
       "type": "string",
-      "description": "Project to add the component to",
+      "description": "Project to add the directive to",
       "x-prompt": "所属项目名"
     },
     "path": {
       "type": "string",
-      "description": "Path to the component file"
+      "description": "Path to the directive file"
     },
     "selector": {
       "type": "string",
-      "description": "Selector of the component",
+      "description": "Selector of the directive",
       "default": "app"
     },
     "export": {
       "type": "boolean",
-      "description": "Whether the component is exported",
+      "description": "Whether the directive is exported",
       "default": false
     }
   },

@@ -1,0 +1,8 @@
+import { Directive } from '@angular/core';
+
+@Directive({
+  selector: '[<%= camelize(name) %>]'
+})
+export class <%= classify(name) %>Directive {
+
+}
