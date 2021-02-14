@@ -177,9 +177,8 @@ export class DataApiAccessService {
   /**
    * 执行 HTTP POST 请求
    *
-   * @template R
-   * @param {PostParameters<R>} parameters 请求参数
-   * @returns {Observable<R>} 其中`T`为服务端响应内容的类型，若输入的请求参数中没有指定`responseType`，则`T`为`unknown`，即忽略响应内容
+   * @param {PostParameters} parameters 请求参数
+   * @returns {Observable<ApiResponse>} 响应内容
    */
   post(parameters: PostParameters): Observable<ApiResponse> {
     const aggregated = {

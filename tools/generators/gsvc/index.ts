@@ -26,7 +26,7 @@ export default function (schema: any) {
         project: schema.project,
         path: schema.path,
         skipTests: true,
-        style: 'css'
+        style: 'scss'
       }),
       applyNewTemplate(schema)
     ])(tree, context);

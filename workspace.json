@@ -40,7 +40,7 @@
                 "bundleName": "primeng"
               },
               {
-                "input": "node_modules/primeng/resources/themes/saga-blue/theme.css",
+                "input": "node_modules/primeng/resources/themes/saga-green/theme.css",
                 "bundleName": "primeng"
               }
             ],
