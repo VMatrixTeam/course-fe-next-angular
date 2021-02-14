@@ -25,7 +25,7 @@ export default async function (tree: Tree, schema: any) {
     directory: schema.directory,
     tags: `load:${schema.load},scope:${schema.scope},type:${schema.type}${schema.tags ? `,${schema.tags}` : ''}`,
     simpleModuleName: true,
-    style: 'scss',
+    style: 'css',
     strict: true,
     unitTestRunner: 'none',
     linter: 'eslint',
