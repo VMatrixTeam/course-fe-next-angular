@@ -16,7 +16,10 @@
             "polyfills": "apps/student-app/src/polyfills.ts",
             "tsConfig": "apps/student-app/tsconfig.app.json",
             "aot": true,
-            "assets": ["apps/student-app/src/favicon.ico", "apps/student-app/src/assets"],
+            "assets": [
+              "apps/student-app/src/favicon.ico",
+              "apps/student-app/src/assets"
+            ],
             "styles": [
               "apps/student-app/src/styles.css",
               {
@@ -95,7 +98,10 @@
         "lint": {
           "builder": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": ["apps/student-app/src/**/*.ts", "apps/student-app/src/**/*.html"]
+            "lintFilePatterns": [
+              "apps/student-app/src/**/*.ts",
+              "apps/student-app/src/**/*.html"
+            ]
           }
         }
       }
@@ -109,7 +115,10 @@
         "lint": {
           "builder": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": ["libs/shared/data-api-access/src/**/*.ts", "libs/shared/data-api-access/src/**/*.html"]
+            "lintFilePatterns": [
+              "libs/shared/data-api-access/src/**/*.ts",
+              "libs/shared/data-api-access/src/**/*.html"
+            ]
           }
         }
       }
@@ -146,7 +155,10 @@
         "lint": {
           "builder": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": ["libs/shared/ui-async/src/**/*.ts", "libs/shared/ui-async/src/**/*.html"]
+            "lintFilePatterns": [
+              "libs/shared/ui-async/src/**/*.ts",
+              "libs/shared/ui-async/src/**/*.html"
+            ]
           }
         }
       }
@@ -160,7 +172,10 @@
         "lint": {
           "builder": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": ["libs/shared/util-pipe/src/**/*.ts", "libs/shared/util-pipe/src/**/*.html"]
+            "lintFilePatterns": [
+              "libs/shared/util-pipe/src/**/*.ts",
+              "libs/shared/util-pipe/src/**/*.html"
+            ]
           }
         }
       }
@@ -191,7 +206,10 @@
         "lint": {
           "builder": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": ["libs/shared/util-etc/src/**/*.ts", "libs/shared/util-etc/src/**/*.html"]
+            "lintFilePatterns": [
+              "libs/shared/util-etc/src/**/*.ts",
+              "libs/shared/util-etc/src/**/*.html"
+            ]
           }
         }
       }
@@ -211,7 +229,10 @@
             "polyfills": "apps/login-app/src/polyfills.ts",
             "tsConfig": "apps/login-app/tsconfig.app.json",
             "aot": true,
-            "assets": ["apps/login-app/src/favicon.ico", "apps/login-app/src/assets"],
+            "assets": [
+              "apps/login-app/src/favicon.ico",
+              "apps/login-app/src/assets"
+            ],
             "styles": [
               "apps/student-app/src/styles.css",
               {
@@ -286,21 +307,10 @@
         "lint": {
           "builder": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": ["apps/login-app/src/**/*.ts", "apps/login-app/src/**/*.html"]
-          }
-        }
-      }
-    },
-    "login-feat-login": {
-      "projectType": "library",
-      "root": "libs/login/feat-login",
-      "sourceRoot": "libs/login/feat-login/src",
-      "prefix": "app",
-      "architect": {
-        "lint": {
-          "builder": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["libs/login/feat-login/src/**/*.ts", "libs/login/feat-login/src/**/*.html"]
+            "lintFilePatterns": [
+              "apps/login-app/src/**/*.ts",
+              "apps/login-app/src/**/*.html"
+            ]
           }
         }
       }
@@ -314,7 +324,27 @@
         "lint": {
           "builder": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": ["libs/shared/data-user/src/**/*.ts", "libs/shared/data-user/src/**/*.html"]
+            "lintFilePatterns": [
+              "libs/shared/data-user/src/**/*.ts",
+              "libs/shared/data-user/src/**/*.html"
+            ]
+          }
+        }
+      }
+    },
+    "login-feat": {
+      "projectType": "library",
+      "root": "libs/login/feat",
+      "sourceRoot": "libs/login/feat/src",
+      "prefix": "app",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/login/feat/src/**/*.ts",
+              "libs/login/feat/src/**/*.html"
+            ]
           }
         }
       }

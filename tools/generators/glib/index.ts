@@ -1,14 +1,12 @@
 import { Tree, names, formatFiles, installPackagesTask, updateJson, getWorkspaceLayout } from '@nrwl/devkit';
 import { libraryGenerator } from '@nrwl/angular/src/schematics/library/library';
-import { dasherize } from '@nrwl/workspace/src/utils/strings';
 import { join } from 'path';
-import { updateImports } from '@nrwl/workspace/src/schematics/move/lib/update-imports';
 
 const TYPE_PREFIX_MAP = {
-  'data-access': 'data-',
-  feature: 'feat-',
-  ui: 'ui-',
-  util: 'util-'
+  'data-access': 'data',
+  feature: 'feat',
+  ui: 'ui',
+  util: 'util'
 };
 
 export default async function (tree: Tree, schema: any) {

@@ -18,40 +18,79 @@
     "default": {
       "runner": "@nrwl/workspace/tasks-runners/default",
       "options": {
-        "cacheableOperations": ["build", "lint", "test", "compodoc"]
+        "cacheableOperations": [
+          "build",
+          "lint",
+          "test",
+          "compodoc"
+        ]
       }
     }
   },
   "projects": {
     "student-app": {
-      "tags": ["scope:student-app"]
+      "tags": [
+        "scope:student-app"
+      ]
     },
     "shared-data-api-access": {
-      "tags": ["load:eager", "scope:shared", "type:data-access"]
+      "tags": [
+        "load:eager",
+        "scope:shared",
+        "type:data-access"
+      ]
     },
     "tools-stub": {
-      "tags": ["type:forbidden"]
+      "tags": [
+        "type:forbidden"
+      ]
     },
     "shared-ui-async": {
-      "tags": ["load:eager", "scope:shared", "type:ui"]
+      "tags": [
+        "load:eager",
+        "scope:shared",
+        "type:ui"
+      ]
     },
     "shared-util-pipe": {
-      "tags": ["load:eager", "scope:shared", "type:util"]
+      "tags": [
+        "load:eager",
+        "scope:shared",
+        "type:util"
+      ]
     },
     "shared-course-data-course-api": {
-      "tags": ["load:eager", "scope:shared", "type:data-access"]
+      "tags": [
+        "load:eager",
+        "scope:shared",
+        "type:data-access"
+      ]
     },
     "shared-util-etc": {
-      "tags": ["load:eager", "scope:shared", "type:util"]
+      "tags": [
+        "load:eager",
+        "scope:shared",
+        "type:util"
+      ]
     },
     "login-app": {
-      "tags": ["scope:login-app"]
-    },
-    "login-feat-login": {
-      "tags": ["load:eager", "scope:login-app", "type:feature"]
+      "tags": [
+        "scope:login-app"
+      ]
     },
     "shared-data-user": {
-      "tags": ["load:eager", "scope:shared", "type:data-access"]
+      "tags": [
+        "load:eager",
+        "scope:shared",
+        "type:data-access"
+      ]
+    },
+    "login-feat": {
+      "tags": [
+        "load:eager",
+        "scope:login-app",
+        "type:feature"
+      ]
     }
   }
 }

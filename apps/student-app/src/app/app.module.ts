@@ -5,6 +5,7 @@ import { RouterModule } from '@angular/router';
 import { DataApiAccessModule } from '@course-fe-next/shared/data-api-access';
 import { PrimeNGConfig } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
+import { RippleModule } from 'primeng/ripple';
 import { AppComponent } from './app.component';
 
 @NgModule({
@@ -18,7 +19,8 @@ import { AppComponent } from './app.component';
       anchorScrolling: 'enabled'
     }),
     DataApiAccessModule,
-    ButtonModule
+    ButtonModule,
+    RippleModule
   ],
   bootstrap: [AppComponent]
 })
