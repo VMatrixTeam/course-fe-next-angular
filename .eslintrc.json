@@ -67,13 +67,7 @@
         ],
         "import/prefer-default-export": "off",
         "import/no-unresolved": "off",
-        "import/order": [
-          "error",
-          {
-            "newlines-between": "never",
-            "alphabetize": { "order": "asc", "caseInsensitive": true }
-          }
-        ],
+        "import/order": "off",
         "import/no-relative-parent-imports": "error",
         "import/named": "off",
         "prefer-arrow/prefer-arrow-functions": [

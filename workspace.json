@@ -40,7 +40,7 @@
                 "bundleName": "primeng"
               },
               {
-                "input": "themes/saga-green.css",
+                "input": "themes/matrix-green-light.css",
                 "bundleName": "primeng"
               }
             ],
@@ -377,6 +377,20 @@
               "libs/shared/frame/feat-user-status/src/**/*.ts",
               "libs/shared/frame/feat-user-status/src/**/*.html"
             ]
+          }
+        }
+      }
+    },
+    "student-feat-core": {
+      "projectType": "library",
+      "root": "libs/student/feat-core",
+      "sourceRoot": "libs/student/feat-core/src",
+      "prefix": "app",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/student/feat-core/src/**/*.ts", "libs/student/feat-core/src/**/*.html"]
           }
         }
       }

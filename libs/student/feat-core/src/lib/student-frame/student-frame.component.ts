@@ -4,7 +4,10 @@ import { UntilDestroy } from '@ngneat/until-destroy';
 @UntilDestroy()
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: 'app-root',
-  template: '<router-outlet></router-outlet>'
+  selector: 'app-student-frame',
+  templateUrl: './student-frame.component.html',
+  styleUrls: ['./student-frame.component.css']
 })
-export class AppComponent {}
+export class StudentFrameComponent {
+
+}

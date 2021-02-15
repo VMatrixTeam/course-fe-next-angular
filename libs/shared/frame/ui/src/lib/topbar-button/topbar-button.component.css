@@ -1,0 +1,15 @@
+.button {
+  @apply rounded-md cursor-pointer p-1 whitespace-nowrap outline-none;
+  @apply text-primary-text;
+  @apply hover:bg-primary-400 hover:bg-opacity-20 focus-within:bg-primary-400 focus-within:bg-opacity-20;
+  transition-property: color, background-color, font-weight;
+  transition-duration: 250ms;
+}
+
+.button--active {
+  @apply bg-surface-b font-bold;
+}
+
+.button__contentWrapper {
+  @apply flex content-center items-center;
+}

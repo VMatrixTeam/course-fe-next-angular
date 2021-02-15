@@ -64,6 +64,9 @@
     },
     "shared-frame-feat-user-status": {
       "tags": ["load:eager", "scope:shared", "type:feature"]
+    },
+    "student-feat-core": {
+      "tags": ["load:eager", "scope:student-app", "type:feature"]
     }
   }
 }

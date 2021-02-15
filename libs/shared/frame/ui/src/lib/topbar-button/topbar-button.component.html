@@ -1,0 +1,16 @@
+<ng-container *ngIf="link; else notLink">
+  <a class="button" [routerLink]="link" routerLinkActive="button--active">
+    <ng-container *ngTemplateOutlet="content"></ng-container>
+  </a>
+</ng-container>
+<ng-template #notLink>
+  <div class="button">
+    <ng-container *ngTemplateOutlet="content"></ng-container>
+  </div>
+</ng-template>
+
+<ng-template #content>
+  <div pRipple class="button__contentWrapper" [className]="extraClass">
+    <ng-content></ng-content>
+  </div>
+</ng-template>

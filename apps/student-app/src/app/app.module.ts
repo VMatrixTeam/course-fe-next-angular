@@ -4,24 +4,12 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
 import { DataApiAccessModule } from '@course-fe-next/shared/data-api-access';
 import { PrimeNGConfig } from 'primeng/api';
-import { ButtonModule } from 'primeng/button';
-import { RippleModule } from 'primeng/ripple';
 import { AppComponent } from './app.component';
+import { FeatCoreModule } from '@course-fe-next/student/feat-core';
 
 @NgModule({
   declarations: [AppComponent],
-  imports: [
-    BrowserModule,
-    BrowserAnimationsModule,
-    RouterModule.forRoot([], {
-      initialNavigation: 'enabled',
-      scrollPositionRestoration: 'enabled',
-      anchorScrolling: 'enabled'
-    }),
-    DataApiAccessModule,
-    ButtonModule,
-    RippleModule
-  ],
+  imports: [BrowserModule, BrowserAnimationsModule, DataApiAccessModule, RouterModule, FeatCoreModule],
   bootstrap: [AppComponent]
 })
 export class AppModule {

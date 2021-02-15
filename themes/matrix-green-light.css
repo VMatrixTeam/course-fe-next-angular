@@ -21,6 +21,7 @@
   --primary-color-200-rgb: 219, 239, 220;
   --primary-color-100-rgb: 237, 247, 238;
   --primary-color-text: #ffffff;
+  --primary-color-text-rgb: 255, 255, 255;
   --font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica, Arial, sans-serif, Apple Color Emoji,
     Segoe UI Emoji, Segoe UI Symbol;
 }

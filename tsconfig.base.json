@@ -26,7 +26,8 @@
       "@course-fe-next/shared/frame/ui": ["libs/shared/frame/ui/src/index.ts"],
       "@course-fe-next/shared/frame/feat": ["libs/shared/frame/feat/src/index.ts"],
       "@course-fe-next/shared/frame/feat-login": ["libs/shared/frame/feat-login/src/index.ts"],
-      "@course-fe-next/shared/frame/feat-user-status": ["libs/shared/frame/feat-user-status/src/index.ts"]
+      "@course-fe-next/shared/frame/feat-user-status": ["libs/shared/frame/feat-user-status/src/index.ts"],
+      "@course-fe-next/student/feat-core": ["libs/student/feat-core/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp", "dist"]

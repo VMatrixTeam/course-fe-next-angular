@@ -29,7 +29,14 @@ module.exports = {
       'primary-400': getColorGenerator('--primary-color-400-rgb'),
       'primary-300': getColorGenerator('--primary-color-300-rgb'),
       'primary-200': getColorGenerator('--primary-color-200-rgb'),
-      'primary-100': getColorGenerator('--primary-color-100-rgb')
+      'primary-100': getColorGenerator('--primary-color-100-rgb'),
+      'surface-a': getColorGenerator('--surface-a'),
+      'surface-b': getColorGenerator('--surface-b'),
+      'surface-c': getColorGenerator('--surface-c'),
+      'surface-d': getColorGenerator('--surface-d'),
+      'surface-e': getColorGenerator('--surface-e'),
+      'surface-f': getColorGenerator('--surface-f'),
+      'primary-text': getColorGenerator('--primary-color-text-rgb')
     }
   },
   variants: {
