@@ -2,11 +2,17 @@
 
 :root {
   --surface-a: #ffffff;
+  --surface-a-rgb: 255, 255, 255;
   --surface-b: #f8f9fa;
+  --surface-b-rgb: 248, 249, 250;
   --surface-c: #e9ecef;
+  --surface-c-rgb: 233, 236, 239;
   --surface-d: #dee2e6;
+  --surface-d-rgb: 222, 226, 230;
   --surface-e: #ffffff;
+  --surface-e-rgb: 255, 255, 255;
   --surface-f: #ffffff;
+  --surface-f-rgb: 255, 255, 255;
   --text-color: #495057;
   --text-color-secondary: #6c757d;
   --primary-color: #4caf50;

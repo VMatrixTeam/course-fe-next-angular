@@ -1,5 +1,3 @@
-const plugin = require('tailwindcss/plugin');
-
 function getColorGenerator(varName) {
   return ({ opacityVariable, opacityValue }) => {
     if (opacityValue !== undefined) {
@@ -30,31 +28,17 @@ module.exports = {
       'primary-300': getColorGenerator('--primary-color-300-rgb'),
       'primary-200': getColorGenerator('--primary-color-200-rgb'),
       'primary-100': getColorGenerator('--primary-color-100-rgb'),
-      'surface-a': getColorGenerator('--surface-a'),
-      'surface-b': getColorGenerator('--surface-b'),
-      'surface-c': getColorGenerator('--surface-c'),
-      'surface-d': getColorGenerator('--surface-d'),
-      'surface-e': getColorGenerator('--surface-e'),
-      'surface-f': getColorGenerator('--surface-f'),
+      'surface-a': getColorGenerator('--surface-a-rgb'),
+      'surface-b': getColorGenerator('--surface-b-rgb'),
+      'surface-c': getColorGenerator('--surface-c-rgb'),
+      'surface-d': getColorGenerator('--surface-d-rgb'),
+      'surface-e': getColorGenerator('--surface-e-rgb'),
+      'surface-f': getColorGenerator('--surface-f-rgb'),
       'primary-text': getColorGenerator('--primary-color-text-rgb')
     }
   },
   variants: {
     extend: {}
   },
-  plugins: [
-    plugin(({ addUtilities }) => {
-      addUtilities({
-        '.text-primary': {
-          color: 'var(--primary-color-text)'
-        },
-        '.text-default': {
-          color: 'var(--text-color)'
-        },
-        '.text-secondary': {
-          color: 'var(--text-color-secondary)'
-        }
-      });
-    })
-  ]
+  plugins: []
 };

@@ -1,14 +1,14 @@
-<div class="flex flex-col min-h-full">
-  <div class="flex-none h-10 flex justify-center bg-primary">
-    <div class="flex items-center p-2" style="min-width: 768px; max-width: 960px">
-      <div class="flex-none">Matrix</div>
-      <nav class="flex-auto flex gap-2">
+<div class="min-h-full">
+  <div class="h-10 flex justify-center bg-primary">
+    <div class="flex p-2 items-stretch" style="min-width: 768px; max-width: 960px">
+      <div class="flex-none text-primary-text">Matrix Logo</div>
+      <nav class="flex-auto flex gap-2 mx-8">
         <ng-container *ngTemplateOutlet="navItems"></ng-container>
       </nav>
       <div class="flex-none flex flex-row-reverse gap-2"></div>
     </div>
   </div>
-  <main class="flex-auto grid bg-surface-a justify-center items-stretch">
+  <main style="min-height: calc(100vh - 2.5rem)" class="grid justify-center items-stretch bg-surface-b">
     <router-outlet></router-outlet>
   </main>
 </div>

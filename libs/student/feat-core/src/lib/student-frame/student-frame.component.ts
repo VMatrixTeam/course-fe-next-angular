@@ -8,6 +8,4 @@ import { UntilDestroy } from '@ngneat/until-destroy';
   templateUrl: './student-frame.component.html',
   styleUrls: ['./student-frame.component.css']
 })
-export class StudentFrameComponent {
-
-}
+export class StudentFrameComponent {}
