@@ -128,7 +128,7 @@ export class ConstantEndpointsProvider {
  */
 export class ConstantApiEntity<T extends ApiResponseBody> extends ApiEntity<T> {
   private readonly getStream = new AsyncRequestStream<HttpParams | undefined, T>((params) =>
-    this.dataApiAccessService.getAsSharedStateStream(
+    this.dataApiAccessService.get$(
       {
         path: this.configuration.endpointsProvider.getPath,
         params
@@ -186,7 +186,7 @@ export class RouteBasedApiEntity<T extends ApiResponseBody> extends ApiEntity<T>
   private readonly getStream = new AsyncRequestStream<HttpParams | undefined, T>((params) =>
     combineLatest([this.latestEndpoints$]).pipe(
       switchMap(([endpoints]) =>
-        this.dataApiAccessService.getAsSharedStateStream(
+        this.dataApiAccessService.get$(
           {
             path: endpoints.getPath,
             params

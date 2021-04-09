@@ -167,7 +167,7 @@ export class DataApiAccessService {
       );
   }
 
-  getAsSharedStateStream<R extends ApiResponseBody>(
+  get$<R extends ApiResponseBody>(
     parameters: GetParameters,
     responseType: ApiResponseBodyTypeConstructor<R>
   ): Observable<AsyncRequestState<R>> {
@@ -202,7 +202,7 @@ export class DataApiAccessService {
       );
   }
 
-  postWithStateStream(parameters: PostParameters): Observable<AsyncRequestState<ApiResponse>> {
+  post$(parameters: PostParameters): Observable<AsyncRequestState<ApiResponse>> {
     return this.wrapWithSharedStateStream(this.post(parameters));
   }
 }

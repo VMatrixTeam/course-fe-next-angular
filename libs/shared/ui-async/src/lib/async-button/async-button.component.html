@@ -19,5 +19,5 @@
     tooltipPosition="bottom"
     tooltipEvent="focus"
   ></button>
-  <button *ngIf="status.completed" pButton pRipple [className]="buttonClasses" [label]="text"></button>
+  <button *ngIf="!status.loading && !status.failed" pButton pRipple [className]="buttonClasses" [label]="text"></button>
 </ng-container>

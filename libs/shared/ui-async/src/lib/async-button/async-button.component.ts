@@ -26,6 +26,7 @@ export class AsyncButtonComponent implements OnInit {
   @Input()
   noLoadingStateDelay = false;
 
+  /** @internal */
   requestState$!: Observable<AsyncRequestState<any>>;
 
   ngOnInit() {
