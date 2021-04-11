@@ -12,7 +12,9 @@ function getColorGenerator(varName) {
 
 module.exports = {
   prefix: '',
+  mode: 'jit',
   purge: {
+    enabled: process.env.NODE_ENV === 'production',
     content: ['./apps/**/*.{html,ts}', './libs/**/*.{html,ts}']
   },
   darkMode: false, // or 'media' or 'class'

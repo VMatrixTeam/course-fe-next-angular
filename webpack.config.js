@@ -1,7 +1,6 @@
-const { patchPostCSS } = require('@ngneat/tailwind');
-const tailwindConfig = require('./tailwind.config.js');
+const ProgressBarPlugin = require('progress-bar-webpack-plugin');
 
 module.exports = (config) => {
-  patchPostCSS(config, tailwindConfig, true);
+  config.plugins.push(new ProgressBarPlugin());
   return config;
 };

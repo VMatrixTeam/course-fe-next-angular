@@ -2,33 +2,47 @@
 
 The future of course-fe
 
-## 推荐 IDE 插件
+## 本地开发环境要求
 
-- tailwind css 的 auto complete 插件
-- eslint 插件
-- prettier 插件
+### IDE
+
+用 Webstorm 吧！VSCode 没有测试过，不保证脚手架各项功能使用正常。
+
+### Node
+
+除非出现兼容性问题，否则建议使用最新版本。
+
+### IDE 插件
+
+- Tailwind css 的 auto complete 插件
+- Eslint 插件
+- Prettier 插件
 
 ## 命令
 
 ### 本地开发测试
 
-`npm install`
+强烈建议使用 pnpm：
 
-`npm start`
+```
+npm install -g pnpm
+pnpm install
+pnpm start
+```
 
 ### 生产构建
 
-`npm run prod:install`
+`pnpm run prod:install`
 
-`npm run prod:affected:build`
+`pnpm run prod:affected:build`
 
 ### 构建文档 (Compodoc)
 
-`npm run compodoc`
+`pnpm run compodoc`
 
 ### 创建 Nx Library
 
-`npm run wg -- glib` 或 `npm run wg -- glib <name> --type=<type> --load=<load> [--directory=<directory>] [--scope=<scope>] [--tags=<tags>]`
+`pnpm run wg -- glib` 或 `pnpm run wg -- glib <name> --type=<type> --load=<load> [--directory=<directory>] [--scope=<scope>] [--tags=<tags>]`
 
 参数解释：
 
@@ -42,24 +56,24 @@ The future of course-fe
 
 ### 删除 Nx Library
 
-`npm run nx -- g rm <project>`
+`pnpm run nx -- g rm <project>`
 
 提示：请慎重操作，删除前请使用 `--dry-run` 来查看命令效果，而不令命令生效
 
 ### 移动 Nx Library
 
-`npm run nx -- g mv --project <project> <destionation>`
+`pnpm run nx -- g mv --project <project> <destionation>`
 
 例子:
 
 将 `libs/my-feature-lib` 移动到 `libs/shared/my-feature-lib`：
-`npm run nx -- g mv --project my-feature-lib shared/my-feature-lib`
+`pnpm run nx -- g mv --project my-feature-lib shared/my-feature-lib`
 
 提示：使用 `--dry-run` 来查看命令效果，而不令命令生效
 
 ### 创建 Angular Component
 
-`npm run wg -- gcom` 或 `npm run wg -- gcom <name> --project=<project>`
+`pnpm run wg -- gcom` 或 `pnpm run wg -- gcom <name> --project=<project>`
 
 其中 `project` 的值可以参考 `nx.json`
 
@@ -67,7 +81,7 @@ The future of course-fe
 
 ### 创建 Angular Service
 
-`npm run wg -- gsvc` 或 `npm run wg -- gsvc <name> --project=<project>`
+`pnpm run wg -- gsvc` 或 `pnpm run wg -- gsvc <name> --project=<project>`
 
 其中 `project` 的值可以参考 `nx.json`
 
