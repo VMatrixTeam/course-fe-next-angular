@@ -193,13 +193,11 @@
           "error",
           {
             "classes": [
-              "private-field",
-              "protected-field",
-              "public-field",
+              "field",
               "constructor",
-              "private-method",
+              "public-method",
               "protected-method",
-              "public-method"
+              "private-method"
             ],
             "classExpressions": ["field", "constructor", "method"],
             "interfaces": ["signature", "field", "constructor", "method"],

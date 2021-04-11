@@ -12,7 +12,7 @@
     "all:lint": "nx run-many --target=lint --all --parallel --maxParallel=8",
     "affected:lint": "nx affected:lint --parallel --maxParallel=8",
     "affected:lint-and-fix": "nx affected:lint --parallel --maxParallel=8 --fix",
-    "start": "cross-env TAILWIND_MODE=watch nx serve --hmr --ssl",
+    "start": "cross-env TAILWIND_MODE=watch nx serve --hmr --ssl --proxy-config proxy.dev.json --host 0.0.0.0",
     "test": "nx test",
     "e2e": "nx e2e",
     "affected:apps": "nx affected:apps",

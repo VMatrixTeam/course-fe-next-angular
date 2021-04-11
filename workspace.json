@@ -100,20 +100,6 @@
         }
       }
     },
-    "shared-data-api-access": {
-      "projectType": "library",
-      "root": "libs/shared/data-api-access",
-      "sourceRoot": "libs/shared/data-api-access/src",
-      "prefix": "app",
-      "architect": {
-        "lint": {
-          "builder": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["libs/shared/data-api-access/src/**/*.ts", "libs/shared/data-api-access/src/**/*.html"]
-          }
-        }
-      }
-    },
     "tools-stub": {
       "root": "libs/tools-stub",
       "sourceRoot": "libs/tools-stub/src",
@@ -137,34 +123,6 @@
         }
       }
     },
-    "shared-ui-async": {
-      "projectType": "library",
-      "root": "libs/shared/ui-async",
-      "sourceRoot": "libs/shared/ui-async/src",
-      "prefix": "app",
-      "architect": {
-        "lint": {
-          "builder": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["libs/shared/ui-async/src/**/*.ts", "libs/shared/ui-async/src/**/*.html"]
-          }
-        }
-      }
-    },
-    "shared-util-pipe": {
-      "projectType": "library",
-      "root": "libs/shared/util-pipe",
-      "sourceRoot": "libs/shared/util-pipe/src",
-      "prefix": "app",
-      "architect": {
-        "lint": {
-          "builder": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["libs/shared/util-pipe/src/**/*.ts", "libs/shared/util-pipe/src/**/*.html"]
-          }
-        }
-      }
-    },
     "shared-course-data-course-api": {
       "projectType": "library",
       "root": "libs/shared/course/data-course-api",
@@ -178,20 +136,6 @@
               "libs/shared/course/data-course-api/src/**/*.ts",
               "libs/shared/course/data-course-api/src/**/*.html"
             ]
-          }
-        }
-      }
-    },
-    "shared-util-etc": {
-      "projectType": "library",
-      "root": "libs/shared/util-etc",
-      "sourceRoot": "libs/shared/util-etc/src",
-      "prefix": "app",
-      "architect": {
-        "lint": {
-          "builder": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["libs/shared/util-etc/src/**/*.ts", "libs/shared/util-etc/src/**/*.html"]
           }
         }
       }
@@ -291,20 +235,6 @@
         }
       }
     },
-    "shared-data-user": {
-      "projectType": "library",
-      "root": "libs/shared/data-user",
-      "sourceRoot": "libs/shared/data-user/src",
-      "prefix": "app",
-      "architect": {
-        "lint": {
-          "builder": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["libs/shared/data-user/src/**/*.ts", "libs/shared/data-user/src/**/*.html"]
-          }
-        }
-      }
-    },
     "login-feat": {
       "projectType": "library",
       "root": "libs/login/feat",
@@ -391,6 +321,79 @@
           "builder": "@nrwl/linter:eslint",
           "options": {
             "lintFilePatterns": ["libs/student/feat-core/src/**/*.ts", "libs/student/feat-core/src/**/*.html"]
+          }
+        }
+      }
+    },
+    "shared-basic-util-etc": {
+      "projectType": "library",
+      "root": "libs/shared/basic/util-etc",
+      "sourceRoot": "libs/shared/basic/util-etc/src",
+      "prefix": "app",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/shared/basic/util-etc/src/**/*.ts", "libs/shared/basic/util-etc/src/**/*.html"]
+          }
+        }
+      }
+    },
+    "shared-basic-data-api-access": {
+      "projectType": "library",
+      "root": "libs/shared/basic/data-api-access",
+      "sourceRoot": "libs/shared/basic/data-api-access/src",
+      "prefix": "app",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/shared/basic/data-api-access/src/**/*.ts",
+              "libs/shared/basic/data-api-access/src/**/*.html"
+            ]
+          }
+        }
+      }
+    },
+    "shared-basic-data-user": {
+      "projectType": "library",
+      "root": "libs/shared/basic/data-user",
+      "sourceRoot": "libs/shared/basic/data-user/src",
+      "prefix": "app",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/shared/basic/data-user/src/**/*.ts", "libs/shared/basic/data-user/src/**/*.html"]
+          }
+        }
+      }
+    },
+    "shared-basic-ui-async": {
+      "projectType": "library",
+      "root": "libs/shared/basic/ui-async",
+      "sourceRoot": "libs/shared/basic/ui-async/src",
+      "prefix": "app",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/shared/basic/ui-async/src/**/*.ts", "libs/shared/basic/ui-async/src/**/*.html"]
+          }
+        }
+      }
+    },
+    "shared-basic-util-pipe": {
+      "projectType": "library",
+      "root": "libs/shared/basic/util-pipe",
+      "sourceRoot": "libs/shared/basic/util-pipe/src",
+      "prefix": "app",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/shared/basic/util-pipe/src/**/*.ts", "libs/shared/basic/util-pipe/src/**/*.html"]
           }
         }
       }

@@ -15,19 +15,19 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@course-fe-next/shared/data-api-access": ["libs/shared/data-api-access/src/index.ts"],
       "@course-fe-next/tools-stub": ["libs/tools-stub/src/index.ts"],
-      "@course-fe-next/shared/ui-async": ["libs/shared/ui-async/src/index.ts"],
-      "@course-fe-next/shared/util-pipe": ["libs/shared/util-pipe/src/index.ts"],
       "@course-fe-next/shared/course/data-course-api": ["libs/shared/course/data-course-api/src/index.ts"],
-      "@course-fe-next/shared/util-etc": ["libs/shared/util-etc/src/index.ts"],
-      "@course-fe-next/shared/data-user": ["libs/shared/data-user/src/index.ts"],
       "@course-fe-next/login/feat": ["libs/login/feat/src/index.ts"],
       "@course-fe-next/shared/frame/ui": ["libs/shared/frame/ui/src/index.ts"],
       "@course-fe-next/shared/frame/feat": ["libs/shared/frame/feat/src/index.ts"],
       "@course-fe-next/shared/frame/feat-login": ["libs/shared/frame/feat-login/src/index.ts"],
       "@course-fe-next/shared/frame/feat-user-status": ["libs/shared/frame/feat-user-status/src/index.ts"],
-      "@course-fe-next/student/feat-core": ["libs/student/feat-core/src/index.ts"]
+      "@course-fe-next/student/feat-core": ["libs/student/feat-core/src/index.ts"],
+      "@course-fe-next/shared/basic/util-etc": ["libs/shared/basic/util-etc/src/index.ts"],
+      "@course-fe-next/shared/basic/data-api-access": ["libs/shared/basic/data-api-access/src/index.ts"],
+      "@course-fe-next/shared/basic/data-user": ["libs/shared/basic/data-user/src/index.ts"],
+      "@course-fe-next/shared/basic/ui-async": ["libs/shared/basic/ui-async/src/index.ts"],
+      "@course-fe-next/shared/basic/util-pipe": ["libs/shared/basic/util-pipe/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp", "dist"]

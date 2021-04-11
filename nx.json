@@ -26,29 +26,14 @@
     "student-app": {
       "tags": ["scope:student-app"]
     },
-    "shared-data-api-access": {
-      "tags": ["load:eager", "scope:shared", "type:data-access"]
-    },
     "tools-stub": {
       "tags": ["type:forbidden"]
-    },
-    "shared-ui-async": {
-      "tags": ["load:eager", "scope:shared", "type:ui"]
-    },
-    "shared-util-pipe": {
-      "tags": ["load:eager", "scope:shared", "type:util"]
     },
     "shared-course-data-course-api": {
       "tags": ["load:eager", "scope:shared", "type:data-access"]
     },
-    "shared-util-etc": {
-      "tags": ["load:eager", "scope:shared", "type:util"]
-    },
     "login-app": {
       "tags": ["scope:login-app"]
-    },
-    "shared-data-user": {
-      "tags": ["load:eager", "scope:shared", "type:data-access"]
     },
     "login-feat": {
       "tags": ["load:eager", "scope:login-app", "type:feature"]
@@ -67,6 +52,21 @@
     },
     "student-feat-core": {
       "tags": ["load:eager", "scope:student-app", "type:feature"]
+    },
+    "shared-basic-util-etc": {
+      "tags": ["load:eager", "scope:shared", "type:util"]
+    },
+    "shared-basic-data-api-access": {
+      "tags": ["load:eager", "scope:shared", "type:data-access"]
+    },
+    "shared-basic-data-user": {
+      "tags": ["load:eager", "scope:shared", "type:data-access"]
+    },
+    "shared-basic-ui-async": {
+      "tags": ["load:eager", "scope:shared", "type:ui"]
+    },
+    "shared-basic-util-pipe": {
+      "tags": ["load:eager", "scope:shared", "type:util"]
     }
   }
 }

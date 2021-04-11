@@ -4,12 +4,21 @@ import { RouterModule, Routes } from '@angular/router';
 import { StudentFrameComponent } from './student-frame/student-frame.component';
 import { FeatModule } from '@course-fe-next/shared/frame/feat';
 import { UiModule } from '@course-fe-next/shared/frame/ui';
+import { DataUserService } from '@course-fe-next/shared/basic/data-user';
 
 const routes: Routes = [
   {
     path: '',
-    component: StudentFrameComponent,
-    children: []
+    resolve: {
+      user: DataUserService
+    },
+    children: [
+      {
+        path: '',
+        component: StudentFrameComponent,
+        children: []
+      }
+    ]
   }
 ];
 
