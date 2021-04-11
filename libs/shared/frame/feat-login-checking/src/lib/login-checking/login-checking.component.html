@@ -1,0 +1,11 @@
+<form
+  class="m-8 p-4 mx-auto max-w-[400px] bg-primary-400 text-center flex flex-col gap-4"
+  *ngIf="showDevLogin"
+  (submit)="onSubmit($event)"
+>
+  <h2 class="text-xl">本地开发登录</h2>
+  <input class="p-2" type="text" placeholder="用户名" #username />
+  <input class="p-2" type="password" placeholder="密码" #password />
+  <button type="submit">登录</button>
+</form>
+<router-outlet *ngIf="!showDevLogin" name="main"></router-outlet>

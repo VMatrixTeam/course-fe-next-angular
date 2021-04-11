@@ -1,4 +1,4 @@
-import { AsyncRequestState } from '@course-fe-next/shared/data-api-access';
+import { AsyncRequestState } from '@course-fe-next/shared/basic/data-api-access';
 import { iif, Observable, of, OperatorFunction } from 'rxjs';
 import { delay, switchMap, tap } from 'rxjs/operators';
 

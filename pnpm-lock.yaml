@@ -3,6 +3,8 @@ lockfileVersion: 5.3
 specifiers:
   '@angular-builders/custom-webpack': 11.1.1
   '@angular-devkit/build-angular': ~0.1102.0
+  '@angular-devkit/core': ^11.2.8
+  '@angular-devkit/schematics': ^11.2.8
   '@angular-eslint/eslint-plugin': ~1.0.0
   '@angular-eslint/eslint-plugin-template': ~1.0.0
   '@angular-eslint/template-parser': ~1.0.0
@@ -22,8 +24,10 @@ specifiers:
   '@ngneat/until-destroy': ^8.0.3
   '@nrwl/angular': 12.0.1
   '@nrwl/cli': 12.0.1
+  '@nrwl/devkit': ^12.0.1
   '@nrwl/eslint-plugin-nx': 12.0.1
   '@nrwl/jest': 12.0.1
+  '@nrwl/linter': 12.0.1
   '@nrwl/tao': 12.0.1
   '@nrwl/workspace': 12.0.1
   '@rx-angular/state': ^1.4.3
@@ -89,6 +93,8 @@ dependencies:
 
 devDependencies:
   '@angular-devkit/build-angular': 0.1102.8_00c77e418bd2e3229d238c37ae16ee8a
+  '@angular-devkit/core': 11.2.8
+  '@angular-devkit/schematics': 11.2.8
   '@angular-eslint/eslint-plugin': 1.0.0_6b9f339e1f52120ade5967b1cbdd0a54
   '@angular-eslint/eslint-plugin-template': 1.0.0_15db557bbf2cfee3cfa5086372785e68
   '@angular-eslint/template-parser': 1.0.0_5818f1e731d2f28fe06d524e68f3e242
@@ -99,8 +105,10 @@ devDependencies:
   '@compodoc/compodoc': 1.1.11
   '@nrwl/angular': 12.0.1_94527fac3704c734b6f25d683f1fa3af
   '@nrwl/cli': 12.0.1
+  '@nrwl/devkit': 12.0.1
   '@nrwl/eslint-plugin-nx': 12.0.1_821fd864720ca869e631f5050a43a83f
   '@nrwl/jest': 12.0.1
+  '@nrwl/linter': 12.0.1
   '@nrwl/tao': 12.0.1
   '@nrwl/workspace': 12.0.1_prettier@2.2.1
   '@tailwindcss/jit': 0.1.18_postcss@8.2.9+tailwindcss@2.1.1

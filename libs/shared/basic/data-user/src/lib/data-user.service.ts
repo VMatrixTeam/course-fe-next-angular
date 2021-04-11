@@ -1,34 +1,20 @@
 import { Inject, Injectable } from '@angular/core';
 import { Resolve } from '@angular/router';
 import { DataApiAccessService } from '@course-fe-next/shared/basic/data-api-access';
-import { map } from 'rxjs/operators';
+import { catchError } from 'rxjs/operators';
 import { User } from './user.schema';
-import { PRODUCTION_ENVIRONMENT } from '@course-fe-next/shared/basic/util-etc';
+import { of } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
-export class DataUserService implements Resolve<User> {
+export class DataUserService implements Resolve<User | null> {
   constructor(
-    @Inject(PRODUCTION_ENVIRONMENT) private readonly isProductionEnvironment: boolean,
+    @Inject('app.environment') private readonly isProductionEnvironment: boolean,
     private readonly dataApiAccessService: DataApiAccessService
   ) {}
 
   resolve() {
-    return this.dataApiAccessService.get({ path: 'users/login' }, User).pipe(
-      map((user) => {
-        if (!user.userId) {
-          this.redirectToLoginApp();
-        }
-        return user;
-      })
-    );
-  }
-
-  private redirectToLoginApp() {
-    if (this.isProductionEnvironment) {
-      // TODO
-      window.location.href = '/login';
-    } else {
-      window.location.href = '/login';
-    }
+    // if the user is not logged in, GET users/login will results in a response with data: {},
+    // which will drive JsonConvert into errors, then we capture it and return null
+    return this.dataApiAccessService.get({ path: 'users/login' }, User).pipe(catchError(() => of(null)));
   }
 }

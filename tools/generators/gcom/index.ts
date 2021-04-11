@@ -20,6 +20,7 @@ export default function (schema: any) {
   return (tree: Tree, context: SchematicContext) => {
     const config = getProjectConfig(tree, schema.project);
     schema.path ||= join(config.sourceRoot, config.projectType === 'application' ? 'app' : 'lib');
+    console.log(schema.path);
     return chain([
       externalSchematic('@schematics/angular', 'component', {
         name: schema.name,

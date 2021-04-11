@@ -49,7 +49,20 @@
       "type": "string",
       "description": "Load type of the library",
       "enum": ["eager", "lazy"],
-      "x-prompt": "加载类型"
+      "x-prompt": {
+        "message": "加载类型",
+        "type": "list",
+        "items": [
+          {
+            "value": "eager",
+            "label": "默认 (eager)"
+          },
+          {
+            "value": "lazy",
+            "label": "懒加载 (lazy)"
+          }
+        ]
+      }
     },
     "scope": {
       "type": "string",

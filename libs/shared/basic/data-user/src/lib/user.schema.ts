@@ -1,15 +1,16 @@
-import { JsonProperty } from 'json2typescript';
+import { JsonObject, JsonProperty } from 'json2typescript';
 
+@JsonObject('User')
 export class User {
   @JsonProperty('user_id', Number)
-  userId!: number;
+  userId = -1;
 
   @JsonProperty('username', String)
-  username!: string;
+  username = '';
 
   @JsonProperty('realname', String)
-  realName!: string;
+  realName = '';
 
   @JsonProperty('nickname', String)
-  nickname!: string;
+  nickname = '';
 }

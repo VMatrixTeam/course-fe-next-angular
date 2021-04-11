@@ -277,23 +277,6 @@
         }
       }
     },
-    "shared-frame-feat-login": {
-      "projectType": "library",
-      "root": "libs/shared/frame/feat-login",
-      "sourceRoot": "libs/shared/frame/feat-login/src",
-      "prefix": "app",
-      "architect": {
-        "lint": {
-          "builder": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": [
-              "libs/shared/frame/feat-login/src/**/*.ts",
-              "libs/shared/frame/feat-login/src/**/*.html"
-            ]
-          }
-        }
-      }
-    },
     "shared-frame-feat-user-status": {
       "projectType": "library",
       "root": "libs/shared/frame/feat-user-status",
@@ -397,6 +380,23 @@
           }
         }
       }
+    },
+    "shared-frame-feat-login-checking": {
+      "projectType": "library",
+      "root": "libs/shared/frame/feat-login-checking",
+      "sourceRoot": "libs/shared/frame/feat-login-checking/src",
+      "prefix": "app",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/shared/frame/feat-login-checking/src/**/*.ts",
+              "libs/shared/frame/feat-login-checking/src/**/*.html"
+            ]
+          }
+        }
+      }
     }
   },
   "cli": {
@@ -404,17 +404,21 @@
   },
   "schematics": {
     "@nrwl/angular:application": {
+      "style": "css",
+      "linter": "eslint",
       "unitTestRunner": "jest",
       "e2eTestRunner": "cypress",
-      "strict": true,
-      "linter": "eslint"
+      "strict": true
     },
     "@nrwl/angular:library": {
+      "style": "css",
+      "linter": "eslint",
       "unitTestRunner": "jest",
-      "strict": true,
-      "linter": "eslint"
+      "strict": true
     },
-    "@nrwl/angular:component": {}
+    "@nrwl/angular:component": {
+      "style": "css"
+    }
   },
   "defaultProject": "student-app"
 }

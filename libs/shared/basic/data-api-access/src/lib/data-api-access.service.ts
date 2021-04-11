@@ -1,5 +1,5 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import { retryBackoff, RetryBackoffConfig } from 'backoff-rxjs';
 import { JsonConvert } from 'json2typescript';
 import { Observable, of, ReplaySubject, throwError } from 'rxjs';
@@ -98,13 +98,17 @@ export function toAbsoluteApiPath(path: string) {
   return `${API_ENDPOINT_PREFIX}/${path}`;
 }
 
-export type RequestResult = ApiResponse | EncapsulatedApiError | Error;
+export interface RequestResult<P extends BaseParameters> {
+  parameters: P;
+  response?: ApiResponse;
+  error?: EncapsulatedApiError | Error;
+}
 
 @Injectable({ providedIn: 'root' })
 export class DataApiAccessService {
   private readonly jsonConvert = new JsonConvert();
 
-  private readonly latestRequestResult = new ReplaySubject<RequestResult>(1);
+  private readonly latestRequestResult = new ReplaySubject<RequestResult<any>>(1);
 
   readonly latestRequestResult$ = this.latestRequestResult.asObservable();
 
@@ -112,7 +116,36 @@ export class DataApiAccessService {
    * @internal
    * @ignore
    */
-  constructor(private readonly httpClient: HttpClient) {}
+  constructor(private readonly httpClient: HttpClient, @Inject('app.environment') isProductionEnvironment: boolean) {
+    if (!isProductionEnvironment) {
+      this.latestRequestResult$.subscribe((result) => {
+        console.info('[DataApiAccessService] New request result:\n', result);
+      });
+    }
+  }
+
+  getSimple(parameters: GetParameters): Observable<ApiResponse> {
+    const aggregated = {
+      params: new HttpParams(),
+      timeoutMs: DEFAULT_CONNECTION_TIMEOUT_MS,
+      ...parameters,
+      retryConfig: { ...DEFAULT_RETRY_BACKOFF_CONFIG, ...parameters.retryConfig }
+    };
+    return this.httpClient
+      .get<ApiResponse>(toAbsoluteApiPath(aggregated.path), { params: aggregated.params })
+      .pipe(
+        timeout(aggregated.timeoutMs),
+        retryBackoff(aggregated.retryConfig),
+        tap((response) =>
+          this.latestRequestResult.next({
+            parameters,
+            response
+          })
+        ),
+        catchError((error) => throwError(this.resolveApiError(error))),
+        tap({ error: (error) => this.latestRequestResult.next({ parameters, error }) })
+      );
+  }
 
   /**
    * 执行 HTTP GET 请求
@@ -138,12 +171,10 @@ export class DataApiAccessService {
         timeout(aggregated.timeoutMs),
         retryBackoff(aggregated.retryConfig),
         map((response) => this.jsonConvert.deserializeObject(response, ApiResponse)),
-        tap((response) => this.latestRequestResult.next(response)),
+        tap((response) => this.latestRequestResult.next({ parameters, response })),
         map((response) => this.jsonConvert.deserializeObject(response.data, responseType)),
-        catchError((err) => throwError(this.resolveApiError(err))),
-        tap({
-          error: (err) => this.latestRequestResult.next(err)
-        })
+        catchError((error) => throwError(this.resolveApiError(error))),
+        tap({ error: (error) => this.latestRequestResult.next({ parameters, error }) })
       );
   }
 
@@ -173,11 +204,9 @@ export class DataApiAccessService {
       .pipe(
         timeout(aggregated.timeoutMs),
         map((response) => this.jsonConvert.deserializeObject(response, ApiResponse)),
-        tap((response) => this.latestRequestResult.next(response)),
-        catchError((err) => throwError(this.resolveApiError(err))),
-        tap({
-          error: (err) => this.latestRequestResult.next(err)
-        })
+        tap((response) => this.latestRequestResult.next({ parameters, response })),
+        catchError((error) => throwError(this.resolveApiError(error))),
+        tap({ error: (error) => this.latestRequestResult.next({ parameters, error }) })
       );
   }
 

@@ -4,7 +4,7 @@
     "defaultBase": "master"
   },
   "implicitDependencies": {
-    "workspace.json": "*",
+    "angular.json": "*",
     "package.json": {
       "dependencies": "*",
       "devDependencies": "*"
@@ -44,9 +44,6 @@
     "shared-frame-feat": {
       "tags": ["load:eager", "scope:shared", "type:feature"]
     },
-    "shared-frame-feat-login": {
-      "tags": ["load:eager", "scope:shared", "type:feature"]
-    },
     "shared-frame-feat-user-status": {
       "tags": ["load:eager", "scope:shared", "type:feature"]
     },
@@ -67,6 +64,9 @@
     },
     "shared-basic-util-pipe": {
       "tags": ["load:eager", "scope:shared", "type:util"]
+    },
+    "shared-frame-feat-login-checking": {
+      "tags": ["load:eager", "scope:shared", "type:feature"]
     }
   }
 }
