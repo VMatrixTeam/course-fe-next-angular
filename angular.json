@@ -179,7 +179,7 @@
                 "bundleName": "primeng"
               },
               {
-                "input": "node_modules/primeng/resources/themes/saga-blue/theme.css",
+                "input": "themes/matrix-green-light.css",
                 "bundleName": "primeng"
               }
             ],
